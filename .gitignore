@@ -35,9 +35,15 @@ Icon
 .Spotlight-V100
 .Trashes
 
+# Auto-packages
+packages
+
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
 Network Trash Folder
 Temporary Items
 .apdisk
+
+*/bin/*
+*/obj/*
