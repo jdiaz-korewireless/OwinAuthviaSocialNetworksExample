@@ -1,10 +1,10 @@
-﻿using Microsoft.Owin.Security;
+﻿using AuthDomain.Models.Account;
+using AuthWebApi.Providers.ClaimsMappingStrategies;
+using AuthWebApi.Resources;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Infrastructure;
 using Microsoft.Owin.Security.OAuth;
-using AuthWebApi.Models.Account;
-using AuthWebApi.Providers.ClaimsMappingStrategies;
-using AuthWebApi.Resources;
 using System;
 using System.Collections.Generic;
 using System.Net;

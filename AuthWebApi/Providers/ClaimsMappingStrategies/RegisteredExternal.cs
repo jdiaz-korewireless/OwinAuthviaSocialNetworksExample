@@ -1,4 +1,5 @@
-﻿using AuthWebApi.Models.Account;
+﻿using AuthDomain.Models.Account;
+using AuthWebApi.Models.Account;
 using System.Security.Claims;
 
 namespace AuthWebApi.Providers.ClaimsMappingStrategies

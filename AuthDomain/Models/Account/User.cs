@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace AuthWebApi.Models.Account
+namespace AuthDomain.Models.Account
 {
     public class User
     {
