@@ -1,5 +1,7 @@
 ﻿using AuthDomain.Models.Account;
+using AuthWebApi.Models.Account;
 using AuthWebApi.Providers.ClaimsMappingStrategies;
+using AuthWebApi.Utils;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -82,6 +84,38 @@ namespace AuthWebApi.Providers
             throw new NotImplementedException();
 
             //return this.UsersManager.GetUserAsync(loginProvider, providerKey);
+        }
+
+        public async Task<User> CreateExternalAsync(ExternalLoginModel externalInfo)
+        {
+            var user = new UserExternalRegInfo()
+            {
+                Email = externalInfo.Email,
+                FullName = externalInfo.FullName,
+                ExternalLoginInfo = new List<ExternalLoginInfo>()
+                {
+                    new ExternalLoginInfo
+                    {
+                        ProviderType = externalInfo.Provider,
+                        ProviderKey = externalInfo.ProviderKey
+                    }
+                }
+            };
+
+            var avatar = await GetExternalAvatarAsync(externalInfo);
+
+            throw new NotImplementedException();
+
+            //return await this.UsersManager.CreateUserAsync(user, avatar);
+        }
+
+        private Task<byte[]> GetExternalAvatarAsync(ExternalLoginModel externalInfo)
+        {
+            if (string.IsNullOrEmpty(externalInfo.AvatarUrl))
+                return null;
+
+            var client = HttpHelper.CreateHttpClient();
+            return client.GetByteArrayAsync(externalInfo.AvatarUrl);
         }
     }
 }

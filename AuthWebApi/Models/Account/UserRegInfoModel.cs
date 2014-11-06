@@ -2,7 +2,7 @@
 
 namespace AuthWebApi.Models.Account
 {
-    public class UserLoginInfoModel
+    public class UserRegInfoModel
     {
         [JsonProperty("email", Required = Required.Always)]
         public string Email { get; set; }

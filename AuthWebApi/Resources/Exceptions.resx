@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ExternalLoginNotFound" xml:space="preserve">
+    <value>Failed to retrieve external login info</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>[{0}]: Internal server error. Please try again later.</value>
+  </data>
   <data name="InvalidGrant" xml:space="preserve">
     <value>The user name or password is incorrect</value>
   </data>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.Security.OAuth;
+﻿using AuthWebApi.FilterAttributes;
+using Microsoft.Owin.Security.OAuth;
 using System.Linq;
 using System.Web.Http;
 
@@ -20,8 +21,12 @@ namespace AuthWebApi
                 routeTemplate: "api/{controller}/{action}"
             );
 
+            config.MessageHandlers.Add(new CompressHandler());
+
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
+
+            config.Filters.Add(new ApiExceptionFilterAttribute());
         }
     }
 }
