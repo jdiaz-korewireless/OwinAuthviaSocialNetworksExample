@@ -1,4 +1,22 @@
-﻿@using System.Collections
-@using AuthWebApi.Models.Account
+﻿@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            getExternalProvidersList();
+        });
 
-@model IList<ExternalLoginProviderModel>
+        function getExternalProvidersList()
+        {
+            $.ajax({
+                type: "GET",
+                url: "api/account/externalLogins?returnUrl=%2F&generateState=true",
+                dataType: 'json',
+                contentType: 'application/json',
+                async: true,
+                success: function () { alert('Success'); },
+                error: function (error) { alert(JSON.stringify(error)); }
+            });
+        }
+    </script>
+}
