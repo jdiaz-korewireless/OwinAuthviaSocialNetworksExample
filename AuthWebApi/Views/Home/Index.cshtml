@@ -14,7 +14,7 @@
                 dataType: 'json',
                 contentType: 'application/json',
                 async: true,
-                success: function () { alert('Success'); },
+                success: function (data) { alert(JSON.stringify(data)); },
                 error: function (error) { alert(JSON.stringify(error)); }
             });
         }
