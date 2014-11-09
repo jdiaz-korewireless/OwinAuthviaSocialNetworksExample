@@ -15,7 +15,8 @@ div#extProviders > div
 {
     display:table-cell;
     background-color:#303030;
-    border-radius: 25px;
+    border-radius:25px;
+    -moz-border-radius:25px;
     min-width:120px;
     vertical-align:middle;
     height:120px;
