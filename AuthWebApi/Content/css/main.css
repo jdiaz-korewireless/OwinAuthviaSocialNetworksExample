@@ -1,23 +1,21 @@
 ﻿body{background:black;color:#999;text-align:center;font:13px/19px 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif}
 
-div#main{display:inline-block}
+div#main{
+    display:inline-block;
+    border-radius: 25px;
+    -moz-border-radius:25px;
+    background-color:#303030;
+}
 
 div#extProviders
 {
     display:table;
-    display:table;
     border-collapse:separate;
-    border-spacing:60px;
-    border: 1px solid red
+    border-spacing:60px; 
 }
 
 div#extProviders > div
 {
     display:table-cell;
-    background-color:#303030;
-    border-radius:25px;
-    -moz-border-radius:25px;
-    min-width:120px;
     vertical-align:middle;
-    height:120px;
 }
