@@ -1,1 +1,22 @@
 ﻿body{background:black;color:#999;text-align:center;font:13px/19px 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif}
+
+div#main{display:inline-block}
+
+div#extProviders
+{
+    display:table;
+    display:table;
+    border-collapse:separate;
+    border-spacing:60px;
+    border: 1px solid red
+}
+
+div#extProviders > div
+{
+    display:table-cell;
+    background-color:#303030;
+    border-radius: 25px;
+    min-width:120px;
+    vertical-align:middle;
+    height:120px;
+}
