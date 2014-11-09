@@ -14,9 +14,25 @@
                 dataType: 'json',
                 contentType: 'application/json',
                 async: true,
-                success: function (data) { alert(JSON.stringify(data)); },
+                success: function (data) { renderExternalProvidersList(data); },
                 error: function (error) { alert(JSON.stringify(error)); }
+            });
+        }
+
+        function renderExternalProvidersList(data)
+        {
+            var extProviders = $('#extProviders');
+            
+
+            $.each(data, function (key, value)
+            {
+                
+                //alert(value.url);
             });
         }
     </script>
 }
+
+<div id="extProviders">
+    <img src="~/Content/img/Facebook.png"/>
+</div>

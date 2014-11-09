@@ -153,6 +153,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\main.css" />
+    <Content Include="Content\img\Facebook.png" />
+    <Content Include="Content\img\Google.png" />
+    <Content Include="Content\img\Microsoft.png" />
     <Content Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
