@@ -2,9 +2,6 @@
 
 div#main{
     display:inline-block;
-    border-radius: 25px;
-    -moz-border-radius:25px;
-    background-color:#303030;
 }
 
 div#extProviders
@@ -18,4 +15,10 @@ div#extProviders > div
 {
     display:table-cell;
     vertical-align:middle;
+    cursor:pointer;
+    background-color:#303030;
+    border-radius: 45px;
+    -moz-border-radius:45px;
+    min-width:120px;
+    height:120px;
 }

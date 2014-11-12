@@ -1,4 +1,5 @@
-﻿using AuthDomain.Models.Account;
+﻿using AuthDomain.Logic;
+using AuthDomain.Models.Account;
 using AuthWebApi.Models.Account;
 using AuthWebApi.Providers.ClaimsMappingStrategies;
 using AuthWebApi.Utils;
@@ -14,6 +15,13 @@ namespace AuthWebApi.Providers
     public class UserProvider
     {
         public static string ClaimTypeAvatarUrl = "avatarUrl";
+
+        public UsersManager UsersManager { get; set; }
+
+        public UserProvider()
+        {
+            this.UsersManager = new UsersManager();
+        }
 
         public ClaimsIdentity CreateIdentity(ClaimsMapper claimsMapper, string authenticationType)
         {
@@ -81,9 +89,7 @@ namespace AuthWebApi.Providers
 
         public Task<User> FindAsync(ExternalLoginProvider loginProvider, string providerKey)
         {
-            throw new NotImplementedException();
-
-            //return this.UsersManager.GetUserAsync(loginProvider, providerKey);
+            return this.UsersManager.GetUserAsync(loginProvider, providerKey);
         }
 
         public async Task<User> CreateExternalAsync(ExternalLoginModel externalInfo)

@@ -1,0 +1,45 @@
+﻿<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            alert(window.location);
+        });
+    </script>
+
+    <style type="text/css">
+        body {
+            font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+            font-size: 12px;
+            margin: 0px;
+        }
+
+        h1 {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            font-size: 18px;
+            font-weight: normal;
+        }
+
+        #wrapper {
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 1px #ccc solid;
+        }
+
+        .submitPara {
+            text-align: right;
+            padding-right: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <h1>Please wait while we are connecting to the external provider...</h1>
+        <p class="submitPara"><img id="waitingImg" src="/Content/img/waiting.gif" alt="waiting" style="margin-right:15px;" /></p>
+    </div>
+</body>
+</html>

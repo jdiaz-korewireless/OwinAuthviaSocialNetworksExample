@@ -22,27 +22,26 @@
         function renderExternalProvidersList(data)
         {
             var extProviders = $('#extProviders');
-            
 
             $.each(data, function (key, value)
             {
-                
-                //alert(value.url);
+                var img = jQuery('<img/>', {
+                    src: "../Content/img/" + value.name + ".png"
+                });
+
+                var div = jQuery('<div/>', {
+                    title: value.name + ' authentication',
+                    onclick: "javascript:ExtAuthDialog.Tab.open('" + value.url + "');"
+                });
+
+                img.appendTo(div);
+                div.appendTo(extProviders);
             });
         }
+
     </script>
 }
 
 <div id="main">
-    <div id="extProviders">
-        <div>
-            <img src="~/Content/img/Facebook.png" />
-        </div>
-        <div>
-            <img src="~/Content/img/Google.png" />
-        </div>
-        <div>
-            <img src="~/Content/img/Microsoft.png" />
-        </div>
-    </div>
+    <div id="extProviders"></div>
 </div>

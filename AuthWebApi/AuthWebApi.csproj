@@ -15,7 +15,7 @@
     <AssemblyName>AuthWebApi</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressSSLPort>44305</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -152,16 +152,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\externalAuthDialog.css" />
     <Content Include="Content\css\main.css" />
+    <Content Include="Content\ExtAuthRequest.htm" />
     <Content Include="Content\img\Facebook.png" />
     <Content Include="Content\img\Google.png" />
     <Content Include="Content\img\Microsoft.png" />
+    <Content Include="Content\img\waiting.gif" />
+    <Content Include="Content\js\extAuthDialog.js" />
     <Content Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\DisplayTemplates\ExternalProviders.cshtml" />
+    <Content Include="Views\Shared\ExternalAuthDialog.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -248,7 +253,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60672</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44300/</IISUrl>
+          <IISUrl>https://localhost:44305/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

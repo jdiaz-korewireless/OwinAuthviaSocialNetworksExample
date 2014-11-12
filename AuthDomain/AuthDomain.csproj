@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiException.cs" />
+    <Compile Include="Logic\UsersManager.cs" />
     <Compile Include="Models\Account\ExternalLoginInfo.cs" />
     <Compile Include="Models\Account\ExternalLoginProvider.cs" />
     <Compile Include="Models\Account\User.cs" />
