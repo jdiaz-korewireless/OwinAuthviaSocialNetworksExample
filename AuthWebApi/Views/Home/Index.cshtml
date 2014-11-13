@@ -44,9 +44,9 @@
             ExtAuthDialog.Tab.open(url);
         }
 
-        function extAuthCallback(tokenType, accessToken)
+        function extAuthCallback(extAuthWindow, tokenType, accessToken)
         {
-            ExtAuthDialog.Tab.close();
+            ExtAuthDialog.Tab.close(extAuthWindow);
 
             $.ajax({
                 type: "GET",

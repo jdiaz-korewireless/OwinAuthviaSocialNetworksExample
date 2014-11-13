@@ -5,19 +5,18 @@
 ExtAuthDialog.Tab = {
     open: function (url) {
 
-        document.getElementById('extAuthDialog_iframe').src = "../../Content/ExtAuthRequest.htm#url=" + url;
-
-        //Adjust locations
-        document.getElementById('extAuthDialog_mask').style.height = ExtAuthDialog.page.theight() + "px";
-        document.getElementById('extAuthDialog_mask').style.width = ExtAuthDialog.page.twidth() + "px";
-        document.getElementById('extAuthDialog_wrapper').style.top = (0.10 * ExtAuthDialog.page.height()) + "px";
-
-        //Show mask
-        document.getElementById('extAuthDialog_overlay').style.display = 'block';
+        window.open("ExtAuthRequest#url=" + url,
+            "External Provider Authentication",
+            "top=" + (0.25 * ExtAuthDialog.page.height()) + "px," +
+            "left=" + (0.35 * ExtAuthDialog.page.width()) + "px," +
+            "scrollbars=yes," +
+            "resizable=yes," +
+            "width=750px," +
+            "height=550px");
     },
-    close: function () {
-        document.getElementById('extAuthDialog_overlay').style.display = 'none';
-        document.getElementById('extAuthDialog_iframe').src = "about:blank;";
+    close: function (extAuthWindow)
+    {
+        extAuthWindow.close();
     }
 }
 

@@ -17,7 +17,7 @@ namespace AuthWebApi
         static Startup()
         {
             PublicClientId = "self";
-            ExternalAuthPageUrl = "Content/ExtAuthRequest.htm";
+            ExternalAuthPageUrl = "ExtAuthRequest";
             var applicationOAuthProvider = new ApplicationOAuthProvider(PublicClientId, ExternalAuthPageUrl);
             OAuthOptions = new OAuthAuthorizationServerOptions
             {

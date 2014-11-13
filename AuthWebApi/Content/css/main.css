@@ -38,3 +38,22 @@ div#userInfo > div > img
 {
     width:150px;height:150px;border-radius:4px;-moz-border-radius:4px;
 }
+
+/*====================== External Authentication Request page ======================*/
+div#extAuthRequestSending
+{
+    padding:10px;display:table;margin-top:100px;
+    background-color:#303030;vertical-align:middle;
+    border-radius: 25px;-moz-border-radius:25px;
+    min-width:330px;height:190px;
+}
+
+div#extAuthRequestSending > div
+{
+    padding:10px;display:table-cell;vertical-align:middle;
+    background-color:white;text-align:left;
+    border-radius: 25px;-moz-border-radius:25px;
+    min-width:220px;height:140px;
+}
+div#extAuthRequestSending > div > h1{color:#303030;font-size:17px}
+div#extAuthRequestSending > div > div{float:right;margin:40px 15px 0 0}
