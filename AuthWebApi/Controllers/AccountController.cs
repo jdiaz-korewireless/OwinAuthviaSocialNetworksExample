@@ -146,7 +146,7 @@ namespace AuthWebApi.Controllers
                         provider = description.AuthenticationType,
                         response_type = "token",
                         client_id = Startup.PublicClientId,
-                        redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
+                        redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri + Startup.ExternalAuthPageUrl,
                         state = state
                     }),
                     State = state

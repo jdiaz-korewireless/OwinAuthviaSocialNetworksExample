@@ -5,7 +5,7 @@
 ExtAuthDialog.Tab = {
     open: function (url) {
 
-        document.getElementById('extAuthDialog_iframe').src = "../../Content/ExtAuthRequest.htm?url=" + url;
+        document.getElementById('extAuthDialog_iframe').src = "../../Content/ExtAuthRequest.htm#url=" + url;
 
         //Adjust locations
         document.getElementById('extAuthDialog_wrapper').style.top = (0.10 * ExtAuthDialog.page.height()) + "px";
@@ -15,6 +15,7 @@ ExtAuthDialog.Tab = {
     },
     close: function () {
         document.getElementById('extAuthDialog_overlay').style.display = 'none';
+        document.getElementById('extAuthDialog_iframe').src = "about:blank;";
     }
 }
 

@@ -1,13 +1,23 @@
 ﻿<html>
 <head>
     <title></title>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function ()
+        function authenticate()
         {
-            alert(window.location);
-        });
+            var hash = window.location.hash;
+            if (hash.indexOf('#url') == 0)
+            {
+                window.location = hash.replace('#url=', '');
+            }
+            else
+            {
+                parent.extAuthCallback(hash.split('=')[1].split('&')[0]);
+            }
+        }
     </script>
 
     <style type="text/css">
@@ -36,7 +46,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="javascript:authenticate();">
     <div id="wrapper">
         <h1>Please wait while we are connecting to the external provider...</h1>
         <p class="submitPara"><img id="waitingImg" src="/Content/img/waiting.gif" alt="waiting" style="margin-right:15px;" /></p>

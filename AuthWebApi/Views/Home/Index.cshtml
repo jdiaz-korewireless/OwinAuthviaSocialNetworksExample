@@ -39,6 +39,12 @@
             });
         }
 
+        function extAuthCallback(accessToken)
+        {
+            ExtAuthDialog.Tab.close();
+            alert(accessToken);
+        }
+
     </script>
 }
 

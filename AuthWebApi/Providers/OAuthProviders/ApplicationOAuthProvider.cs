@@ -15,17 +15,19 @@ namespace AuthWebApi.Providers.OAuthProviders
 {
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider, IAuthenticationTokenProvider
     {
-        private readonly string _publicClientId;
+        private readonly string publicClientId;
+        private readonly string externalAuthPageUrl;
         public UserProvider UserProvider { get; set; }
 
-        public ApplicationOAuthProvider(string publicClientId)
+        public ApplicationOAuthProvider(string publicClientId, string externalAuthPageUrl)
         {
             if (publicClientId == null)
             {
                 throw new ArgumentNullException("publicClientId");
             }
 
-            _publicClientId = publicClientId;
+            this.publicClientId = publicClientId;
+            this.externalAuthPageUrl = externalAuthPageUrl;
             this.UserProvider = new UserProvider();
         }
 
@@ -71,9 +73,9 @@ namespace AuthWebApi.Providers.OAuthProviders
 
         public override Task ValidateClientRedirectUri(OAuthValidateClientRedirectUriContext context)
         {
-            if (context.ClientId == _publicClientId)
+            if (context.ClientId == publicClientId)
             {
-                Uri expectedRootUri = new Uri(context.Request.Uri, "/");
+                Uri expectedRootUri = new Uri(context.Request.Uri, "/" + this.externalAuthPageUrl);
 
                 if (expectedRootUri.AbsoluteUri == context.RedirectUri)
                 {
