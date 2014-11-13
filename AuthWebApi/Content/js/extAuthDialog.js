@@ -8,6 +8,8 @@ ExtAuthDialog.Tab = {
         document.getElementById('extAuthDialog_iframe').src = "../../Content/ExtAuthRequest.htm#url=" + url;
 
         //Adjust locations
+        document.getElementById('extAuthDialog_mask').style.height = ExtAuthDialog.page.theight() + "px";
+        document.getElementById('extAuthDialog_mask').style.width = ExtAuthDialog.page.twidth() + "px";
         document.getElementById('extAuthDialog_wrapper').style.top = (0.10 * ExtAuthDialog.page.height()) + "px";
 
         //Show mask

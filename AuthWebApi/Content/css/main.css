@@ -1,4 +1,5 @@
-﻿body{background:black;color:#999;text-align:center;font:13px/19px 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif}
+﻿body{background:black;color:#999;text-align:center;font:16px/19px 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif}
+strong{color:#fff;font-weight:normal;}
 
 div#main{
     display:inline-block;
@@ -8,7 +9,7 @@ div#extProviders
 {
     display:table;
     border-collapse:separate;
-    border-spacing:60px; 
+    border-spacing:60px;
 }
 
 div#extProviders > div
@@ -16,9 +17,24 @@ div#extProviders > div
     display:table-cell;
     vertical-align:middle;
     cursor:pointer;
-    background-color:#303030;
-    border-radius: 45px;
-    -moz-border-radius:45px;
-    min-width:120px;
-    height:120px;
+}
+
+div#userInfo
+{
+    display:none;
+    padding:10px;
+    background-color:#303030;text-align:left;
+    border-radius: 25px;-moz-border-radius:25px;
+    min-width:240px;height:200px;
+}
+
+div#userInfo > div
+{
+    float:left;
+    padding:10px;margin:10px 15px 10px 10px;
+    background:#181818;border-radius:6px;-moz-border-radius:6px;display:block
+}
+div#userInfo > div > img
+{
+    width:150px;height:150px;border-radius:4px;-moz-border-radius:4px;
 }

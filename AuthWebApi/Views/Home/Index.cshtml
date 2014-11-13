@@ -12,7 +12,6 @@
                 type: "GET",
                 url: "api/account/externalLogins?returnUrl=%2F&generateState=true",
                 dataType: 'json',
-                contentType: 'application/json',
                 async: true,
                 success: function (data) { renderExternalProvidersList(data); },
                 error: function (error) { alert(JSON.stringify(error)); }
@@ -31,7 +30,7 @@
 
                 var div = jQuery('<div/>', {
                     title: value.name + ' authentication',
-                    onclick: "javascript:ExtAuthDialog.Tab.open('" + value.url + "');"
+                    onclick: "javascript:extAuth('" + value.url + "');"
                 });
 
                 img.appendTo(div);
@@ -39,10 +38,41 @@
             });
         }
 
-        function extAuthCallback(accessToken)
+        function extAuth(url)
+        {
+            $('#userInfo').hide();
+            ExtAuthDialog.Tab.open(url);
+        }
+
+        function extAuthCallback(tokenType, accessToken)
         {
             ExtAuthDialog.Tab.close();
-            alert(accessToken);
+
+            $.ajax({
+                type: "GET",
+                url: "api/account/userInfo",
+                dataType: 'json',
+                async: true,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
+                },
+                success: function (data) { showUserInfo(data); },
+                error: function (error) { alert(JSON.stringify(error)); }
+            });
+        }
+
+        function showUserInfo(userInfo)
+        {
+            var userInfoDiv = $('#userInfo');
+
+            var info = "<div><img src=\"" + userInfo["ava"] + "\" /></div>";
+            info += "<p>" + "<strong>Email:</strong> " + userInfo["email"] + "</p>";
+            info += "<p>" + "<strong>Name:</strong> " + userInfo["name"] + "</p>";
+            info += "<p>" + "<strong>Is registered:</strong> " + userInfo["isReg"] + "</p>";
+            info += "<p>" + "<strong>Provider:</strong> " + userInfo["provider"] + "</p>";
+
+            userInfoDiv.html(info);
+            userInfoDiv.fadeIn(1000);
         }
 
     </script>
@@ -50,4 +80,5 @@
 
 <div id="main">
     <div id="extProviders"></div>
+    <div id="userInfo"></div>
 </div>

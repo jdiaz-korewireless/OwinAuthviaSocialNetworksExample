@@ -13,9 +13,14 @@
             {
                 window.location = hash.replace('#url=', '');
             }
-            else
+            else if (hash.indexOf('#access_token') == 0)
             {
-                parent.extAuthCallback(hash.split('=')[1].split('&')[0]);
+                var hashValues = hash.split('=');
+  
+                var tokenType = hashValues[2].split('&')[0];
+                var accessToken = hashValues[1].split('&')[0];
+                
+                parent.extAuthCallback(tokenType, accessToken);
             }
         }
     </script>
