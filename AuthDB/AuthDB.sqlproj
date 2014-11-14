@@ -59,4 +59,8 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\User.sql" />
+    <Build Include="Tables\UserExternalLogin.sql" />
+  </ItemGroup>
 </Project>
