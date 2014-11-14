@@ -94,25 +94,19 @@ namespace AuthWebApi.Providers
 
         public async Task<User> CreateExternalAsync(ExternalLoginModel externalInfo)
         {
-            var user = new UserExternalRegInfo()
+            var user = new UserRegistration()
             {
                 Email = externalInfo.Email,
                 FullName = externalInfo.FullName,
-                ExternalLoginInfo = new List<ExternalLoginInfo>()
+                Avatar = await GetExternalAvatarAsync(externalInfo),
+                ExternalLoginInfo = new ExternalLoginInfo
                 {
-                    new ExternalLoginInfo
-                    {
-                        ProviderType = externalInfo.Provider,
-                        ProviderKey = externalInfo.ProviderKey
-                    }
+                    ProviderType = externalInfo.Provider,
+                    ProviderKey = externalInfo.ProviderKey
                 }
             };
 
-            var avatar = await GetExternalAvatarAsync(externalInfo);
-
-            throw new NotImplementedException();
-
-            //return await this.UsersManager.CreateUserAsync(user, avatar);
+            return await this.UsersManager.CreateUserAsync(user);
         }
 
         private Task<byte[]> GetExternalAvatarAsync(ExternalLoginModel externalInfo)

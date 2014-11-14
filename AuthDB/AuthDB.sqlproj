@@ -58,11 +58,16 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\User.sql" />
     <Build Include="Tables\UserExternalLogin.sql" />
     <Build Include="Tables\ExternalLoginProvider.sql" />
+    <Build Include="Procedures\spGetExternalUser.sql" />
+    <Build Include="Procedures\spGetUserByEmail.sql" />
+    <Build Include="Procedures\spCreateUser.sql" />
+    <Build Include="Procedures\spCreateUserExtLogin.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="InitDB.sql" />

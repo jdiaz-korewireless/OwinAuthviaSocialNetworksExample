@@ -1,10 +1,15 @@
-﻿body{background:black;color:#999;text-align:center;font:16px/19px 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif}
+﻿body{
+    color:#999;text-align:center;font:16px/19px 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+    background-color:black;
+}
 strong{color:#fff;font-weight:normal;}
+
 
 div#main{
     display:inline-block;
 }
 
+/*====================== External Providers List ======================*/
 div#extProviders
 {
     display:table;
@@ -17,15 +22,22 @@ div#extProviders > div
     display:table-cell;
     vertical-align:middle;
     cursor:pointer;
+    min-width:100px;min-height:100px
 }
 
+div#extProviders > div:hover > img
+{
+    width:91px;height:91px
+}
+/*====================== User info ======================*/
 div#userInfo
 {
     display:none;
     padding:10px;
-    background-color:#303030;text-align:left;
+    text-align:left;
     border-radius: 25px;-moz-border-radius:25px;
     min-width:240px;height:200px;
+    background-color:#303030;
 }
 
 div#userInfo > div
@@ -38,6 +50,15 @@ div#userInfo > div > img
 {
     width:150px;height:150px;border-radius:4px;-moz-border-radius:4px;
 }
+
+span.href
+{
+    text-decoration:none;color:#ccc;
+    border-bottom-width:1px;
+    border-bottom-style:dotted;
+    cursor:pointer;
+}
+span.href:hover{text-decoration:none;color:#fff;}
 
 /*====================== External Authentication Request page ======================*/
 div#extAuthRequestSending

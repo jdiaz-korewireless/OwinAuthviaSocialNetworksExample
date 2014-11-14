@@ -30,7 +30,7 @@
 
                 var div = jQuery('<div/>', {
                     title: value.name + ' authentication',
-                    onclick: "javascript:extAuth('" + value.url + "');"
+                    onclick: "javascript:extAuth('" + value.url + "');",
                 });
 
                 img.appendTo(div);
@@ -56,23 +56,54 @@
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
                 },
-                success: function (data) { showUserInfo(data); },
+                success: function (data) { showUserInfo(tokenType, accessToken, data); },
                 error: function (error) { alert(JSON.stringify(error)); }
             });
         }
 
-        function showUserInfo(userInfo)
+        function showUserInfo(tokenType, accessToken, userInfo)
         {
+            if (userInfo["status"] == "error")
+            {
+                alert(userInfo["statusmessage"]);
+                return;
+            }
+
             var userInfoDiv = $('#userInfo');
 
             var info = "<div><img src=\"" + userInfo["ava"] + "\" /></div>";
             info += "<p>" + "<strong>Email:</strong> " + userInfo["email"] + "</p>";
             info += "<p>" + "<strong>Name:</strong> " + userInfo["name"] + "</p>";
             info += "<p>" + "<strong>Provider:</strong> " + userInfo["provider"] + "</p>";
-            info += "<p>" + "<strong>Is registered:</strong> " + userInfo["isReg"] + "</p>";
+
+            var divRegistration = null;
+
+            if (userInfo["isReg"] == "true")
+            {
+                info += "<p>Registered</p>";
+            }
+            else
+            {
+                info += "<span class=\"href\" onclick=\"javascript:register('" + tokenType + "', '" + accessToken + "');\">Register</span>";
+            }
 
             userInfoDiv.html(info);
             userInfoDiv.fadeIn(1000);
+        }
+
+        function register(tokenType, accessToken)
+        {
+            $.ajax({
+                type: "POST",
+                url: "api/account/registerExternal",
+                dataType: 'json',
+                async: true,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
+                },
+                success: function (data) { showUserInfo(tokenType, accessToken, data); },
+                error: function (error) { alert(JSON.stringify(error)); }
+            });
         }
 
     </script>
