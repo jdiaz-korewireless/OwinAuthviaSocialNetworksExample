@@ -39,6 +39,11 @@ namespace AuthWebApi.Providers.ClaimsMappingStrategies
         public string Version { get; protected set; }
 
         /// <summary>
+        /// The boolean flag that indicates if the user's email was verified.
+        /// </summary>
+        public string IsVerified { get; protected set; }
+
+        /// <summary>
         /// Issuer of the user's info
         /// </summary>
         public string Issuer { get; protected set; }

@@ -16,6 +16,9 @@ namespace AuthWebApi.Models.Account
         [JsonProperty("isReg", Required = Required.Always)]
         public bool IsRegistered { get; set; }
 
+        [JsonProperty("verified", Required = Required.Always)]
+        public bool IsVerified { get; set; }
+
         [JsonProperty("provider", Required = Required.Always)]
         public string LoginProvider { get; set; }
     }

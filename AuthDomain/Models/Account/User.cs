@@ -18,6 +18,9 @@ namespace AuthDomain.Models.Account
         public string AvatarUrl { get; set; }
 
         [JsonIgnore]
+        public bool IsVerified { get; set; }
+
+        [JsonIgnore]
         public DateTime TimeStamp { get; set; }
     }
 }

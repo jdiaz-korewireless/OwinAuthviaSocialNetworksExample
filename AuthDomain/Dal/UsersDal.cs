@@ -76,6 +76,7 @@ namespace AuthDomain.Dal
                     CreatedDate = createdDate,
                     TimeStamp = createdDate,
                     VerifyEmailCode = verifyEmailCode,
+                    IsVerified = false,
                     AvatarUrl = GetAvatarUrl(userId)
                 };
             }
@@ -132,6 +133,8 @@ namespace AuthDomain.Dal
             while (sqlDataReader.Read())
             {
                 int userId = (int)sqlDataReader["Id"];
+                Guid? verifyEmailCode = (Guid?)sqlDataReader["VerifyEmailCode"];
+
                 var user = new UserDb()
                 {
                     Id = userId,
@@ -140,7 +143,8 @@ namespace AuthDomain.Dal
                     FullName = (string)sqlDataReader["FullName"],
                     CreatedDate = (DateTime)sqlDataReader["CreatedDate"],
                     TimeStamp = (DateTime)sqlDataReader["UpdatedDate"],
-                    VerifyEmailCode = (Guid)sqlDataReader["VerifyEmailCode"],
+                    VerifyEmailCode = verifyEmailCode,
+                    IsVerified = !verifyEmailCode.HasValue,
                     AvatarUrl = GetAvatarUrl(userId)
                 };
 

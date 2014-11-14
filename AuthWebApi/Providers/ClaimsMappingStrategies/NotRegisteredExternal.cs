@@ -12,6 +12,7 @@ namespace AuthWebApi.Providers.ClaimsMappingStrategies
             this.AvatarUrl = extLogin.AvatarUrl ?? string.Empty;
             this.Sid = extLogin.ProviderKey;
             this.Version = string.Empty;
+            this.IsVerified = false.ToString();
             this.Issuer = extLogin.Provider.ToString();
             this.OriginalIssuer = this.Issuer;
         }

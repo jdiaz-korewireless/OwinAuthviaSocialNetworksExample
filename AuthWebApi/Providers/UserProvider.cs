@@ -15,6 +15,7 @@ namespace AuthWebApi.Providers
     public class UserProvider
     {
         public static string ClaimTypeAvatarUrl = "avatarUrl";
+        public static string ClaimTypeIsVerified = "isVerified";
 
         public UsersManager UsersManager { get; set; }
 
@@ -32,6 +33,7 @@ namespace AuthWebApi.Providers
             claims.Add(new Claim(ClaimTypes.GivenName, claimsMapper.FullName, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
             claims.Add(new Claim(ClaimTypes.Sid, claimsMapper.Sid, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
             claims.Add(new Claim(ClaimTypes.Version, claimsMapper.Version, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
+            claims.Add(new Claim(ClaimTypeIsVerified, claimsMapper.IsVerified, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
             claims.Add(new Claim(ClaimTypeAvatarUrl, claimsMapper.AvatarUrl, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
 
             return new ClaimsIdentity(claims, authenticationType);
@@ -68,6 +70,7 @@ namespace AuthWebApi.Providers
                 Email = claimsIdentity.FindFirstValue(ClaimTypes.Email),
                 FullName = claimsIdentity.FindFirstValue(ClaimTypes.GivenName),
                 AvatarUrl = claimsIdentity.FindFirstValue(ClaimTypeAvatarUrl),
+                IsVerified = Boolean.Parse(claimsIdentity.FindFirstValue(ClaimTypeIsVerified)),
                 TimeStamp = ClaimsMapper.GetTimeStamp(claimsIdentity.FindFirstValue(ClaimTypes.Version))
             };
         }

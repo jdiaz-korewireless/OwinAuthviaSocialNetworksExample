@@ -43,6 +43,7 @@ namespace AuthWebApi.Controllers
             {
                 Email = userIdentity.FindFirstValue(ClaimTypes.Email),
                 FullName = userIdentity.FindFirstValue(ClaimTypes.GivenName),
+                IsVerified = Boolean.Parse(userIdentity.FindFirstValue(UserProvider.ClaimTypeIsVerified)),
                 AvatarUrl = userIdentity.FindFirstValue(UserProvider.ClaimTypeAvatarUrl),
                 IsRegistered = (externalLogin == null || externalLogin.IsRegistered),
                 LoginProvider = (externalLogin != null ? externalLogin.Provider.ToString() : null)
