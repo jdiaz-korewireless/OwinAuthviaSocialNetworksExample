@@ -7,11 +7,17 @@ namespace AuthDomain.Dal
 {
     public interface IUsersDal
     {
+        void Execute(IsolationLevel isolationLevel, Action<SqlTransaction> action);
+
         TResult Execute<TResult>(IsolationLevel isolationLevel, Func<SqlTransaction, TResult> function);
+
+        UserDb GetUser(SqlTransaction transaction, int userId);
 
         UserDb GetUser(SqlTransaction transaction, string email);
 
         UserDb GetUser(SqlTransaction transaction, ExternalLoginProvider loginProvider, string providerKey);
+
+        byte[] GetAvatar(SqlTransaction transaction, int userId);
 
         UserDb CreateUser(SqlTransaction transaction, UserRegistration userRegistration);
 
@@ -20,5 +26,7 @@ namespace AuthDomain.Dal
         void CreateUserAvatar(SqlTransaction transaction, int userId, byte[] avatar);
 
         void UpdateUserAvatar(SqlTransaction transaction, int userId, byte[] avatar);
+
+        void DeleteUserWithDependencies(SqlTransaction transaction, int userId);
     }
 }

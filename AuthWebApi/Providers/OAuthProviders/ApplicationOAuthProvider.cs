@@ -97,7 +97,7 @@ namespace AuthWebApi.Providers.OAuthProviders
             {
                 { "email", user.Email },
                 { "name", user.FullName ?? string.Empty },
-                { "ava", user.AvatarUrl ?? string.Empty }
+                { "ava", UserProvider.GetAvatarUrl(user) ?? string.Empty }
             };
             return new AuthenticationProperties(data);
         }

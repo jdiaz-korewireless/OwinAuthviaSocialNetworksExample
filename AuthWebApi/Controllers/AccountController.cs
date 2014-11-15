@@ -14,7 +14,9 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -31,15 +33,15 @@ namespace AuthWebApi.Controllers
             this.UserProvider = new UserProvider();
         }
 
-        // GET api/account/userInfo
+        // GET api/account/user
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [Route("userInfo")]
-        public UserRegInfoModel GetUserInfo()
+        [Route("user")]
+        public ApiResult GetUser()
         {
             ClaimsIdentity userIdentity = User.Identity as ClaimsIdentity;
             ExternalLoginModel externalLogin = ExternalLoginModel.FromIdentity(userIdentity);
 
-            return new UserRegInfoModel
+            var user = new UserViewModel
             {
                 Email = userIdentity.FindFirstValue(ClaimTypes.Email),
                 FullName = userIdentity.FindFirstValue(ClaimTypes.GivenName),
@@ -48,6 +50,34 @@ namespace AuthWebApi.Controllers
                 IsRegistered = (externalLogin == null || externalLogin.IsRegistered),
                 LoginProvider = (externalLogin != null ? externalLogin.Provider.ToString() : null)
             };
+
+            return new UserResult(user);
+        }
+
+        // DELETE api/account        
+        [Route("user")]
+        public async Task<ApiResult> DeleteUser()
+        {
+            await this.UserProvider.DeleteUserWithDependenciesAsync(User.Identity);
+            return new SuccessResult();
+        }
+
+        // GET api/account/avatar/123
+        [AllowAnonymous]
+        [Route("avatar/{userId:int}")]
+        public async Task<HttpResponseMessage> GetAvatar(int userId)
+        {
+            byte[] avatar = await this.UserProvider.GetAvatarAsync(userId);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK, avatar, "application/octet-stream");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpg");
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                MaxAge = new TimeSpan(24, 0, 0),
+                Public = true
+            };
+
+            return response;
         }
 
         #region External Login
@@ -172,8 +202,8 @@ namespace AuthWebApi.Controllers
                 throw new ApiException(Exceptions.ExternalLoginNotFound);
             }
 
-            User user = await this.UserProvider.CreateExternalAsync(externalLogin);
-            return new UserResult(user);
+            var result = await this.UserProvider.CreateExternalAsync(externalLogin);
+            return new UserResult(result);
         }
 
         #endregion

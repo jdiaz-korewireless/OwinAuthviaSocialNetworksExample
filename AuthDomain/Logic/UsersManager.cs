@@ -15,6 +15,18 @@ namespace AuthDomain.Logic
             this.UsersDal = new UsersDal();
         }
 
+        public Task<User> GetUserAsync(int userId)
+        {
+            return Task<User>.Factory.StartNew(() =>
+            {
+                return this.UsersDal.Execute(IsolationLevel.ReadCommitted,
+                (tran) =>
+                {
+                    return this.UsersDal.GetUser(tran, userId);
+                });
+            });
+        }
+
         public Task<User> GetUserAsync(ExternalLoginProvider loginProvider, string providerKey)
         {
             return Task<User>.Factory.StartNew(() =>
@@ -23,6 +35,18 @@ namespace AuthDomain.Logic
                 (tran) =>
                 {
                     return this.UsersDal.GetUser(tran, loginProvider, providerKey);
+                });
+            });
+        }
+
+        public Task<byte[]> GetAvatarAsync(int userId)
+        {
+            return Task<byte[]>.Factory.StartNew(() =>
+            {
+                return this.UsersDal.Execute(IsolationLevel.ReadCommitted,
+                (tran) =>
+                {
+                    return this.UsersDal.GetAvatar(tran, userId);
                 });
             });
         }
@@ -69,6 +93,18 @@ namespace AuthDomain.Logic
                     }
 
                     return dbUser;
+                });
+            });
+        }
+
+        public Task DeleteUserWithDependenciesAsync(int userId)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                this.UsersDal.Execute(IsolationLevel.Snapshot,
+                (tran) =>
+                {
+                    this.UsersDal.DeleteUserWithDependencies(tran, userId);
                 });
             });
         }

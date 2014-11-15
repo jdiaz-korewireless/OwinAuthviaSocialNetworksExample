@@ -50,7 +50,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "api/account/userInfo",
+                url: "api/account/user",
                 dataType: 'json',
                 async: true,
                 beforeSend: function (xhr) {
@@ -61,27 +61,35 @@
             });
         }
 
-        function showUserInfo(tokenType, accessToken, userInfo)
+        function showUserInfo(tokenType, accessToken, data)
         {
-            if (userInfo["status"] == "error")
+            if (data["status"] == "error")
             {
-                alert(userInfo["statusmessage"]);
+                alert(data["statusmessage"]);
                 return;
             }
 
+            var userInfo = data["user"];
             var userInfoDiv = $('#userInfo');
 
             var info = "<div><img src=\"" + userInfo["ava"] + "\" /></div>";
             info += "<p>" + "<strong>Email:</strong> " + userInfo["email"] + "</p>";
             info += "<p>" + "<strong>Name:</strong> " + userInfo["name"] + "</p>";
             info += "<p>" + "<strong>Provider:</strong> " + userInfo["provider"] + "</p>";
-            info += "<p>" + "<strong>Verified:</strong> " + userInfo["verified"] + "</p>";
-
-            var divRegistration = null;
-
-            if (userInfo["isReg"] == "true")
+            if (userInfo["isReg"] == true)
             {
-                info += "<p>Registered</p>";
+                info += "<span style=\"margin-right:20px\"" +
+                        " title=\"Delete user\" class=\"href\"" +
+                        " onclick=\"javascript:deleteUser('" + tokenType + "', '" + accessToken + "');\">Delete</span>";
+
+                if (userInfo["verified"] == true)
+                {
+                    info += "<span>Verified</span>";
+                }
+                else
+                {
+                    info += "<span class=\"href\" onclick=\"javascript:verify('" + tokenType + "', '" + accessToken + "');\">Verify</span>";
+                }
             }
             else
             {
@@ -103,6 +111,20 @@
                     xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
                 },
                 success: function (data) { showUserInfo(tokenType, accessToken, data); },
+                error: function (error) { alert(JSON.stringify(error)); }
+            });
+        }
+
+        function deleteUser(tokenType, accessToken) {
+            $.ajax({
+                type: "DELETE",
+                url: "api/account/user",
+                dataType: 'json',
+                async: true,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
+                },
+                success: function (data) { alert('Done'); $('#userInfo').hide(); },
                 error: function (error) { alert(JSON.stringify(error)); }
             });
         }

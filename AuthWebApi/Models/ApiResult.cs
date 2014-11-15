@@ -1,4 +1,4 @@
-﻿using AuthDomain.Models.Account;
+﻿using AuthWebApi.Models.Account;
 using Newtonsoft.Json;
 
 namespace AuthWebApi.Models
@@ -43,9 +43,9 @@ namespace AuthWebApi.Models
     public class UserResult : SuccessResult
     {
         [JsonProperty("user")]
-        public User User { get; set; }
+        public UserViewModel User { get; set; }
 
-        public UserResult(User user)
+        public UserResult(UserViewModel user)
         {
             User = user;
         }

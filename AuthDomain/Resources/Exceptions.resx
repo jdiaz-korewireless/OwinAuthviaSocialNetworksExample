@@ -126,6 +126,9 @@
   <data name="MoreThanOneUserFoundByExtProvider" xml:space="preserve">
     <value>More than one user found for the provider '{0}' and the key '{1}'</value>
   </data>
+  <data name="MoreThanOneUserFoundById" xml:space="preserve">
+    <value>More than one user found for the id '{0}'</value>
+  </data>
   <data name="UserAlreadyRegistered" xml:space="preserve">
     <value>User with an email '{0}' already exists</value>
   </data>

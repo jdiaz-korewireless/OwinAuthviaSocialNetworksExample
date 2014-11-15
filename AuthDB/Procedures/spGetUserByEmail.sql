@@ -2,7 +2,7 @@
 
 create procedure [dbo].[spGetUserByEmail]
 (
-	@email		nvarchar(100)		
+	@email	nvarchar(100)		
 )
 as
 

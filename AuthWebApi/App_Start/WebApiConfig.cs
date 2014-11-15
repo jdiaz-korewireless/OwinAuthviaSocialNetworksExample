@@ -1,4 +1,5 @@
 ﻿using AuthWebApi.FilterAttributes;
+using AuthWebApi.MediaTypeFormatters;
 using Microsoft.Owin.Security.OAuth;
 using System.Linq;
 using System.Web.Http;
@@ -25,8 +26,11 @@ namespace AuthWebApi
 
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
+            
+            config.Formatters.Add(new BinaryMediaTypeFormatter());
 
             config.Filters.Add(new ApiExceptionFilterAttribute());
+            config.Filters.Add(new AuthorizeAndCheckAttribute());
         }
     }
 }

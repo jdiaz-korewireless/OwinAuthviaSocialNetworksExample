@@ -68,6 +68,12 @@
     <Build Include="Procedures\spGetUserByEmail.sql" />
     <Build Include="Procedures\spCreateUser.sql" />
     <Build Include="Procedures\spCreateUserExtLogin.sql" />
+    <Build Include="Tables\UserAvatar.sql" />
+    <Build Include="Procedures\spCreateUserAvatar.sql" />
+    <Build Include="Procedures\spDeleteUserWithDependencies.sql" />
+    <Build Include="Procedures\spUpdateUserAvatar.sql" />
+    <Build Include="Procedures\spGetUserById.sql" />
+    <Build Include="Procedures\spGetUserAvatar.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="InitDB.sql" />

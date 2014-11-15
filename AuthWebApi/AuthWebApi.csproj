@@ -186,14 +186,17 @@
     <Compile Include="Controllers\ApiControllerBase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="FilterAttributes\ApiExceptionFilterAttribute.cs" />
+    <Compile Include="FilterAttributes\AuthorizeAndCheckAttribute.cs" />
     <Compile Include="FilterAttributes\ShowViewOnErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HttpActionResult\ChallengeResult.cs" />
+    <Compile Include="MediaTypeFormatters\BinaryMediaTypeFormatter.cs" />
+    <Compile Include="MediaTypeFormatters\HelperFormatter.cs" />
     <Compile Include="Models\Account\ExternalLoginModel.cs" />
     <Compile Include="Models\Account\ExternalLoginProviderModel.cs" />
-    <Compile Include="Models\Account\UserRegInfoModel.cs" />
+    <Compile Include="Models\Account\UserViewModel.cs" />
     <Compile Include="Models\ApiResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ClaimsMappingStrategies\ClaimsMapper.cs" />

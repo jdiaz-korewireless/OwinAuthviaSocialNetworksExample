@@ -11,6 +11,55 @@ namespace AuthDomain.Dal
 {
     class UsersDal : IUsersDal
     {
+        public void Execute(IsolationLevel isolationLevel, Action<SqlTransaction> action)
+        {
+            using (var connection = CreateSqlConnection())
+            {
+                connection.Open();
+
+                using (SqlTransaction tran = connection.BeginTransaction(isolationLevel))
+                {
+                    action(tran);
+                    tran.Commit();
+                }
+            }
+        }
+
+        public TResult Execute<TResult>(IsolationLevel isolationLevel, Func<SqlTransaction, TResult> function)
+        {
+            using (var connection = CreateSqlConnection())
+            {
+                connection.Open();
+
+                using (SqlTransaction tran = connection.BeginTransaction(isolationLevel))
+                {
+                    var result = function(tran);
+                    tran.Commit();
+
+                    return result;
+                }
+            }
+        }
+
+        public UserDb GetUser(SqlTransaction transaction, int userId)
+        {
+            using (var cmd = new SqlCommand("[dbo].[spGetUserById]", transaction.Connection, transaction))
+            {
+                cmd.Parameters.AddWithValue("userId", userId);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (var sqlDataReader = cmd.ExecuteReader())
+                {
+                    var users = MapUsersFromDb(sqlDataReader);
+
+                    if (users.Count > 1)
+                        throw new InvalidOperationException(string.Format(Exceptions.MoreThanOneUserFoundById, userId));
+
+                    return users.SingleOrDefault();
+                }
+            }
+        }
+
         public UserDb GetUser(SqlTransaction transaction, string email)
         {
             using (var cmd = new SqlCommand("[dbo].[spGetUserByEmail]", transaction.Connection, transaction))
@@ -50,6 +99,17 @@ namespace AuthDomain.Dal
             }
         }
 
+        public byte[] GetAvatar(SqlTransaction transaction, int userId)
+        {
+            using (var cmd = new SqlCommand("[dbo].[spGetUserAvatar]", transaction.Connection, transaction))
+            {
+                cmd.Parameters.AddWithValue("userId", userId);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                return (byte[])NullableValue(cmd.ExecuteScalar());
+            }
+        }
+
         public UserDb CreateUser(SqlTransaction transaction, UserRegistration userRegistration)
         {
             using (var cmd = new SqlCommand("[dbo].[spCreateUser]", transaction.Connection, transaction))
@@ -76,8 +136,7 @@ namespace AuthDomain.Dal
                     CreatedDate = createdDate,
                     TimeStamp = createdDate,
                     VerifyEmailCode = verifyEmailCode,
-                    IsVerified = false,
-                    AvatarUrl = GetAvatarUrl(userId)
+                    IsVerified = false
                 };
             }
         }
@@ -97,27 +156,36 @@ namespace AuthDomain.Dal
 
         public void CreateUserAvatar(SqlTransaction transaction, int userId, byte[] avatar)
         {
-            throw new NotImplementedException();
+            using (var cmd = new SqlCommand("[dbo].[spCreateUserAvatar]", transaction.Connection, transaction))
+            {
+                cmd.Parameters.AddWithValue("userId", userId);
+                cmd.Parameters.AddWithValue("avatar", avatar);                
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public void UpdateUserAvatar(SqlTransaction transaction, int userId, byte[] avatar)
         {
-            throw new NotImplementedException();
+            using (var cmd = new SqlCommand("[dbo].[spUpdateUserAvatar]", transaction.Connection, transaction))
+            {
+                cmd.Parameters.AddWithValue("userId", userId);
+                cmd.Parameters.AddWithValue("avatar", avatar);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.ExecuteNonQuery();
+            }
         }
 
-        public TResult Execute<TResult>(IsolationLevel isolationLevel, Func<SqlTransaction, TResult> function)
+        public void DeleteUserWithDependencies(SqlTransaction transaction, int userId)
         {
-            using (var connection = CreateSqlConnection())
+            using (var cmd = new SqlCommand("[dbo].[spDeleteUserWithDependencies]", transaction.Connection, transaction))
             {
-                connection.Open();
+                cmd.Parameters.AddWithValue("userId", userId);
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlTransaction tran = connection.BeginTransaction(isolationLevel))
-                {
-                    var result = function(tran);
-                    tran.Commit();
-
-                    return result;
-                }
+                cmd.ExecuteNonQuery();
             }
         }
 
@@ -133,19 +201,18 @@ namespace AuthDomain.Dal
             while (sqlDataReader.Read())
             {
                 int userId = (int)sqlDataReader["Id"];
-                Guid? verifyEmailCode = (Guid?)sqlDataReader["VerifyEmailCode"];
+                Guid? verifyEmailCode = (Guid?)NullableValue(sqlDataReader["VerifyEmailCode"]);
 
                 var user = new UserDb()
                 {
                     Id = userId,
                     Email = (string)sqlDataReader["Email"],
-                    Password = (string)sqlDataReader["Password"],
-                    FullName = (string)sqlDataReader["FullName"],
+                    Password = (string)NullableValue(sqlDataReader["Password"]),
+                    FullName = (string)NullableValue(sqlDataReader["FullName"]),
                     CreatedDate = (DateTime)sqlDataReader["CreatedDate"],
                     TimeStamp = (DateTime)sqlDataReader["UpdatedDate"],
                     VerifyEmailCode = verifyEmailCode,
-                    IsVerified = !verifyEmailCode.HasValue,
-                    AvatarUrl = GetAvatarUrl(userId)
+                    IsVerified = !verifyEmailCode.HasValue
                 };
 
                 result.Add(user);
@@ -154,17 +221,20 @@ namespace AuthDomain.Dal
             return result;
         }
 
-        private static string GetAvatarUrl(int userId)
-        {
-            return string.Format("/avatar/{0}?anticache={1}", userId, Environment.TickCount);
-        }
-
         private static object NullableValue(string value)
         {
             if (string.IsNullOrEmpty(value))
                 return DBNull.Value;
             else
                 return value.Trim();
+        }
+
+        private static object NullableValue(object value)
+        {
+            if (value == DBNull.Value)
+                return null;
+            else
+                return value;
         }
     }
 }

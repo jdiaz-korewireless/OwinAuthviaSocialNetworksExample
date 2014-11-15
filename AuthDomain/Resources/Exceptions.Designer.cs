@@ -88,6 +88,15 @@ namespace AuthDomain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More than one user found for the id &apos;{0}&apos;.
+        /// </summary>
+        internal static string MoreThanOneUserFoundById {
+            get {
+                return ResourceManager.GetString("MoreThanOneUserFoundById", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User with an email &apos;{0}&apos; already exists.
         /// </summary>
         internal static string UserAlreadyRegistered {

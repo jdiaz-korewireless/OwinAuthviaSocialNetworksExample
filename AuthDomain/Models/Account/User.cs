@@ -14,9 +14,6 @@ namespace AuthDomain.Models.Account
         [JsonProperty("name")]
         public string FullName { get; set; }
 
-        [JsonProperty("ava")]
-        public string AvatarUrl { get; set; }
-
         [JsonIgnore]
         public bool IsVerified { get; set; }
 

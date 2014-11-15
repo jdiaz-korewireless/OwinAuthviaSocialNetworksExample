@@ -69,7 +69,6 @@ namespace AuthWebApi.Providers
                 Id = Int32.Parse(userIdClaim.Value),
                 Email = claimsIdentity.FindFirstValue(ClaimTypes.Email),
                 FullName = claimsIdentity.FindFirstValue(ClaimTypes.GivenName),
-                AvatarUrl = claimsIdentity.FindFirstValue(ClaimTypeAvatarUrl),
                 IsVerified = Boolean.Parse(claimsIdentity.FindFirstValue(ClaimTypeIsVerified)),
                 TimeStamp = ClaimsMapper.GetTimeStamp(claimsIdentity.FindFirstValue(ClaimTypes.Version))
             };
@@ -78,9 +77,7 @@ namespace AuthWebApi.Providers
         public Task<User> FindAsync(IIdentity identity)
         {
             int userId = Int32.Parse(identity.GetUserId());
-            throw new NotImplementedException();
-
-            //return this.UsersManager.GetUserAsync(userId);
+            return this.UsersManager.GetUserAsync(userId);
         }
 
         public Task<User> FindAsync(string login, string password)
@@ -95,9 +92,9 @@ namespace AuthWebApi.Providers
             return this.UsersManager.GetUserAsync(loginProvider, providerKey);
         }
 
-        public async Task<User> CreateExternalAsync(ExternalLoginModel externalInfo)
+        public async Task<UserViewModel> CreateExternalAsync(ExternalLoginModel externalInfo)
         {
-            var user = new UserRegistration()
+            var userRegistration = new UserRegistration()
             {
                 Email = externalInfo.Email,
                 FullName = externalInfo.FullName,
@@ -109,16 +106,46 @@ namespace AuthWebApi.Providers
                 }
             };
 
-            return await this.UsersManager.CreateUserAsync(user);
+            var user = await this.UsersManager.CreateUserAsync(userRegistration);
+            return MapUserToViewModel(user, externalInfo.Provider.ToString());
         }
 
-        private Task<byte[]> GetExternalAvatarAsync(ExternalLoginModel externalInfo)
+        public Task<byte[]> GetAvatarAsync(int userId)
+        {
+            return this.UsersManager.GetAvatarAsync(userId);
+        }
+
+        public Task DeleteUserWithDependenciesAsync(IIdentity identity)
+        {
+            int userId = Int32.Parse(identity.GetUserId());
+            return this.UsersManager.DeleteUserWithDependenciesAsync(userId);
+        }
+
+        private static Task<byte[]> GetExternalAvatarAsync(ExternalLoginModel externalInfo)
         {
             if (string.IsNullOrEmpty(externalInfo.AvatarUrl))
                 return null;
 
             var client = HttpHelper.CreateHttpClient();
             return client.GetByteArrayAsync(externalInfo.AvatarUrl);
+        }
+
+        private static UserViewModel MapUserToViewModel(User user, string loginProvider)
+        {
+            return new UserViewModel
+            {
+                Email = user.Email,
+                FullName = user.FullName,
+                IsVerified = user.IsVerified,
+                AvatarUrl = GetAvatarUrl(user),
+                IsRegistered = true,
+                LoginProvider = loginProvider
+            };
+        }
+
+        public static string GetAvatarUrl(User user)
+        {
+            return string.Format("api/account/avatar/{0}?anticache={1}", user.Id, Environment.TickCount);
         }
     }
 }
