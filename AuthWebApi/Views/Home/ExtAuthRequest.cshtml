@@ -18,10 +18,8 @@
             {
                 var hashValues = hash.split('=');
 
-                var tokenType = hashValues[2].split('&')[0];
-                var accessToken = hashValues[1].split('&')[0];
-
-                opener.extAuthCallback(window, tokenType, accessToken);
+                setToken(hashValues[2].split('&')[0], hashValues[1].split('&')[0]);
+                window.location = "/";
             }
         }
     </script>

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using AuthWebApi.Models.Account;
 using System.Web.Mvc;
 
 namespace AuthWebApi.Controllers
@@ -9,7 +6,7 @@ namespace AuthWebApi.Controllers
     public class HomeController : Controller
     {
         public ActionResult Index()
-        {            
+        {
             return View();
         }
 

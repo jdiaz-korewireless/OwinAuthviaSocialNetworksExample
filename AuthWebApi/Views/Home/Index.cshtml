@@ -4,6 +4,9 @@
         $(document).ready(function ()
         {
             getExternalProvidersList();
+
+            if (isTokenSet())
+                getUserInfo();
         });
     </script>
 }

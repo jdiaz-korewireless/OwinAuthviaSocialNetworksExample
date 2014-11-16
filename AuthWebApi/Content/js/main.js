@@ -30,37 +30,36 @@ function getExternalProvidersListCallback(data) {
 }
 
 /* Authenticate a user via an external provider */
-function extAuth(url) {
+function extAuth(url)
+{
+    resetToken();
     $('#info').hide();
-    ExtAuthDialog.Tab.open(url);
+
+    window.location = "ExtAuthRequest#url=" + url;
 }
 
-function extAuthCallback(extAuthWindow, tokenType, accessToken) {
-    ExtAuthDialog.Tab.close(extAuthWindow);
-
+function getUserInfo()
+{
     $.ajax({
         type: "GET",
         url: "api/account/user",
         dataType: 'json',
         async: true,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
-        },
-        success: function (data) { showUserInfo(tokenType, accessToken, data); },
+        beforeSend: function (xhr) { setRequestHeaders(xhr); },
+        success: function (data) { showUserInfo(data); },
         error: function (error) { alert(JSON.stringify(error)); }
     });
 }
 
 /* Register a user authenticated by an external provider */
-function registerExternal(tokenType, accessToken) {
+function registerExternal()
+{
     $.ajax({
         type: "POST",
         url: "api/account/registerExternal",
         dataType: 'json',
         async: true,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
-        },
+        beforeSend: function (xhr) { setRequestHeaders(xhr); },
         success: function (data) { registerExternalCallback(data); },
         error: function (error) { executeActionFailCallback(error); }
     });
@@ -70,36 +69,35 @@ function registerExternalCallback(data)
 {
     if (!checkStatus(data))
         return;
-
+    
     var accessToken = data["accessToken"];
-    showUserInfo(accessToken["type"], accessToken["value"], data["user"]);
+    setToken(accessToken["type"], accessToken["value"]);
+
+    showUserInfo(data["user"]);
 }
 
 /* Verify a registered user by sending him an email wiht a confirmation code */
-function verify(tokenType, accessToken) {
+function verify() {
     $.ajax({
         type: "POST",
         url: "api/account/verify",
         dataType: 'json',
         async: true,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
-        },
-        success: function (data) { showUserInfo(tokenType, accessToken, data); },
+        beforeSend: function (xhr) { setRequestHeaders(xhr); },
+        success: function (data) { showUserInfo(data); },
         error: function (error) { executeActionFailCallback(error); }
     });
 }
 
 /* Delete a registered user and all his dependencies */
-function deleteUser(tokenType, accessToken) {
+function deleteUser()
+{
     $.ajax({
         type: "DELETE",
         url: "api/account/user",
         dataType: 'json',
         async: true,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
-        },
+        beforeSend: function (xhr) { setRequestHeaders(xhr); },
         success: function (result) { deleteUserCallback(result); },
         error: function (error) { executeActionFailCallback(error); }
     });
@@ -109,6 +107,8 @@ function deleteUserCallback(result)
 {
     if (!checkStatus(result))
         return;
+
+    resetToken();
 
     showMessage("Account has been successfully deleted.<br/>" +
         "A confirmation letter has been sent to your email.");
@@ -124,7 +124,7 @@ function showMessage(message)
 }
 
 /* Generate a table with the user's information and available actions */
-function showUserInfo(tokenType, accessToken, userInfo)
+function showUserInfo(userInfo)
 {
     var userInfoDiv = $('#info');
 
@@ -138,7 +138,7 @@ function showUserInfo(tokenType, accessToken, userInfo)
         //Registered user actions:
 
         //  delete account
-        info += generateActionLink("Delete", "deleting", "deleteUser", tokenType, accessToken, "margin-right:20px");
+        info += generateActionLink("Delete", "deleting", "deleteUser", "margin-right:20px");
 
         //  if not verified -> verify by sending an email with a confirmation code
         if (userInfo["verified"] == true)
@@ -147,20 +147,20 @@ function showUserInfo(tokenType, accessToken, userInfo)
         }
         else
         {
-            info += generateActionLink("Verify", "verifying", "verify", tokenType, accessToken);
+            info += generateActionLink("Verify", "verifying", "verify");
         }
     }
     else
     {
         //Register new account
-        info += generateActionLink("Register", "registering", "registerExternal", tokenType, accessToken);
+        info += generateActionLink("Register", "registering", "registerExternal");
     }
 
     userInfoDiv.html(info);
     userInfoDiv.fadeIn(1000);
 }
 
-function generateActionLink(text, activeText, actionName, tokenType, accessToken, style)
+function generateActionLink(text, activeText, actionName, style)
 {
     var styleAttr = "";
     var styleAttrProgressValue = "display:none;";
@@ -174,20 +174,18 @@ function generateActionLink(text, activeText, actionName, tokenType, accessToken
     return "<span id=\"" + actionName + "\" class=\"href\"" + styleAttr
             + "onclick=\"javascript:executeAction('"
                 + actionName + "',"
-                + actionName + ",'"
-                + tokenType + "', '"
-                + accessToken + "');\">"+ text + "</span>"
+                + actionName + ");\">"+ text + "</span>"
             + "<span id=\"progress-" + actionName + "\" class=\"progress\" "
             + "style=\"" + styleAttrProgressValue + "\">"
             + activeText + "...</span>";
 }
 
-function executeAction(id, action, tokenType, accessToken)
+function executeAction(id, action)
 {
     $(".href").hide();
     $("#progress-" + id).show();
 
-    action(tokenType, accessToken);
+    action();
 }
 
 function executeActionFailCallback(error)
@@ -207,4 +205,34 @@ function checkStatus(result)
     }
 
     return true;
+}
+
+/*============================= Token support functions ====================*/
+var tokenTypeKey = "tokenType";
+var tokenValueKey = "accessToken";
+
+function isTokenSet()
+{
+    return sessionStorage.getItem(tokenTypeKey) != null
+        && sessionStorage.getItem(tokenValueKey) != null;
+}
+
+function resetToken()
+{
+    sessionStorage.removeItem(tokenTypeKey);
+    sessionStorage.removeItem(tokenValueKey);
+}
+
+function setToken(type, value)
+{
+    sessionStorage.setItem(tokenTypeKey, type);
+    sessionStorage.setItem(tokenValueKey, value);
+}
+
+function setRequestHeaders(xhr)
+{
+    xhr.setRequestHeader("Authorization",
+        sessionStorage.getItem(tokenTypeKey)
+        + " "
+        + sessionStorage.getItem(tokenValueKey));
 }
