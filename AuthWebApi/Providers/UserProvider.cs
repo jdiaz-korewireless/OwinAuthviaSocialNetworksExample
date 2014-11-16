@@ -93,10 +93,9 @@ namespace AuthWebApi.Providers
             return this.UsersManager.VerifyAsync(userId);
         }
 
-        public Task DeleteUserWithDependenciesAsync(IIdentity identity)
+        public Task DeleteUserWithDependenciesAsync(User user)
         {
-            int userId = Int32.Parse(identity.GetUserId());
-            return this.UsersManager.DeleteUserWithDependenciesAsync(userId);
+            return this.UsersManager.DeleteUserWithDependenciesAsync(user.Id);
         }
 
         private static Task<byte[]> GetExternalAvatarAsync(ExternalLoginModel externalInfo)

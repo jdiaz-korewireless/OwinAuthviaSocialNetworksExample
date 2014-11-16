@@ -25,10 +25,12 @@ namespace AuthWebApi.Controllers
     public class AccountController : ApiControllerBase
     {
         public UserProvider UserProvider { get; set; }
+        public EmailProvider EmailProvider { get; set; }
 
         public AccountController()
         {
             this.UserProvider = new UserProvider();
+            this.EmailProvider = new EmailProvider();
         }
 
         // GET api/account/user
@@ -76,7 +78,7 @@ namespace AuthWebApi.Controllers
         {
             var userVerification = await this.UserProvider.VerifyAsync(User.Identity);
 
-            new EmailProvider().SendConfirmationCodeAsync(userVerification);
+            this.EmailProvider.SendConfirmationCodeAsync(userVerification);
 
             return new SuccessResult();
         }
@@ -85,7 +87,11 @@ namespace AuthWebApi.Controllers
         [Route("user")]
         public async Task<ApiResult> DeleteUser()
         {
-            await this.UserProvider.DeleteUserWithDependenciesAsync(User.Identity);
+            var user = OwinHelper.CreateUser(User.Identity as ClaimsIdentity);
+
+            await this.UserProvider.DeleteUserWithDependenciesAsync(user);
+            this.EmailProvider.SendDeleteConfirmationAsync(user);
+
             return new SuccessResult();
         }
 

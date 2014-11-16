@@ -28,5 +28,21 @@ namespace AuthWebApi.Providers
 
             Task.Factory.StartNew(() => mailMessage.Send());
         }
+
+        public void SendDeleteConfirmationAsync(User user)
+        {
+            if (user == null)
+                throw new ArgumentNullException("user");
+
+            ViewData.Model = user;
+            var mailMessage = Populate(x =>
+            {
+                x.Subject = Emails.DeleteConfirmation;
+                x.ViewName = "DeleteConfirmation";
+                x.To.Add(user.Email);
+            });
+
+            Task.Factory.StartNew(() => mailMessage.Send());
+        }
     }
 }

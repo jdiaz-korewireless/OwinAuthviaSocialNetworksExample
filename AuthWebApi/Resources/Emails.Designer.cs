@@ -61,6 +61,15 @@ namespace AuthWebApi.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SupperSlonic deletion confirmation.
+        /// </summary>
+        internal static string DeleteConfirmation {
+            get {
+                return ResourceManager.GetString("DeleteConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SupperSlonic registration confirmation.
         /// </summary>
         internal static string RegistrationConfirmation {

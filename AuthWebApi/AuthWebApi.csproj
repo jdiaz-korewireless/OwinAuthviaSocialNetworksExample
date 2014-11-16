@@ -169,6 +169,7 @@
     <Content Include="Views\Home\ExtAuthRequest.cshtml" />
     <Content Include="Views\EmailProvider\_MailLayout.cshtml" />
     <Content Include="Views\EmailProvider\RegistrationConfirmation.cshtml" />
+    <Content Include="Views\EmailProvider\DeleteConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
