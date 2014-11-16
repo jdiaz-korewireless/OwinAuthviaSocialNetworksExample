@@ -77,6 +77,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Mvc.Mailer">
+      <HintPath>..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -165,6 +168,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\ExtAuthRequest.cshtml" />
+    <Content Include="Views\EmailProvider\_MailLayout.cshtml" />
+    <Content Include="Views\EmailProvider\RegistrationConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -204,6 +209,7 @@
     <Compile Include="Providers\ClaimsMappingStrategies\NotRegisteredExternal.cs" />
     <Compile Include="Providers\ClaimsMappingStrategies\RegisteredExternal.cs" />
     <Compile Include="Providers\ClaimsMappingStrategies\RegisteredLocal.cs" />
+    <Compile Include="Providers\EmailProvider.cs" />
     <Compile Include="Providers\OAuthProviders\ApplicationOAuthProvider.cs" />
     <Compile Include="Providers\OAuthProviders\FacebookOAuthProvider.cs" />
     <Compile Include="Providers\OAuthProviders\GoogleOAuthProvider.cs" />
@@ -213,6 +219,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Credentials.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Emails.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Emails.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -228,6 +239,10 @@
     <EmbeddedResource Include="Resources\Credentials.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Credentials.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Emails.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Emails.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Exceptions.resx">
       <Generator>ResXFileCodeGenerator</Generator>

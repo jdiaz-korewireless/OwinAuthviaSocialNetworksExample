@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AuthDomain.Resources {
+namespace AuthWebApi.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace AuthDomain.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Exceptions {
+    internal class Emails {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Exceptions() {
+        internal Emails() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace AuthDomain.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AuthDomain.Resources.Exceptions", typeof(Exceptions).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AuthWebApi.Resources.Emails", typeof(Emails).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,11 @@ namespace AuthDomain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to External login provider &apos;{0}&apos; is already registered for the user.
+        ///   Looks up a localized string similar to SupperSlonic registration confirmation.
         /// </summary>
-        internal static string ExternalLoginAlreadyExists {
+        internal static string RegistrationConfirmation {
             get {
-                return ResourceManager.GetString("ExternalLoginAlreadyExists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User with an email &apos;{0}&apos; already exists.
-        /// </summary>
-        internal static string UserAlreadyRegistered {
-            get {
-                return ResourceManager.GetString("UserAlreadyRegistered", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User has already been verified.
-        /// </summary>
-        internal static string UserAlreadyVerified {
-            get {
-                return ResourceManager.GetString("UserAlreadyVerified", resourceCulture);
+                return ResourceManager.GetString("RegistrationConfirmation", resourceCulture);
             }
         }
     }

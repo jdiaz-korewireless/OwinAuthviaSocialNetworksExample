@@ -53,6 +53,7 @@
     <Compile Include="Models\Account\User.cs" />
     <Compile Include="Models\Account\UserDb.cs" />
     <Compile Include="Models\Account\UserRegistration.cs" />
+    <Compile Include="Models\Account\UserVerification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>

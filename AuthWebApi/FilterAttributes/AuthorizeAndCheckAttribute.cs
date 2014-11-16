@@ -34,7 +34,7 @@ namespace AuthWebApi.FilterAttributes
             {
                 actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
-                    ReasonPhrase = Exceptions.PasswordChanged
+                    ReasonPhrase = Exceptions.UserDataChanged
                 };
 
                 return false;

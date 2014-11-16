@@ -97,6 +97,27 @@ namespace AuthDomain.Logic
             });
         }
 
+        public Task<UserVerification> VerifyAsync(int userId)
+        {
+            return Task<UserVerification>.Factory.StartNew(() =>
+            {
+                return this.UsersDal.Execute(IsolationLevel.ReadCommitted,
+                (tran) =>
+                {
+                    var user = this.UsersDal.GetUser(tran, userId);
+
+                    if (user.IsVerified)
+                        throw new ApiException(Exceptions.UserAlreadyVerified);
+
+                    return new UserVerification()
+                    {
+                        User = user,
+                        VerifyEmailCode = user.VerifyEmailCode.Value
+                    };
+                });
+            });
+        }
+
         public Task DeleteUserWithDependenciesAsync(int userId)
         {
             return Task.Factory.StartNew(() =>

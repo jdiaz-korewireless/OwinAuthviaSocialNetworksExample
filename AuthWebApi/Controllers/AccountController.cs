@@ -52,14 +52,6 @@ namespace AuthWebApi.Controllers
             return user;
         }
 
-        // DELETE api/account        
-        [Route("user")]
-        public async Task<ApiResult> DeleteUser()
-        {
-            await this.UserProvider.DeleteUserWithDependenciesAsync(User.Identity);
-            return new SuccessResult();
-        }
-
         // GET api/account/avatar/123
         [AllowAnonymous]
         [Route("avatar/{userId:int}")]
@@ -76,6 +68,25 @@ namespace AuthWebApi.Controllers
             };
 
             return response;
+        }
+
+        // POST api/account/verify
+        [Route("verify")]
+        public async Task<ApiResult> Verify()
+        {
+            var userVerification = await this.UserProvider.VerifyAsync(User.Identity);
+
+            new EmailProvider().SendConfirmationCodeAsync(userVerification);
+
+            return new SuccessResult();
+        }
+
+        // DELETE api/account        
+        [Route("user")]
+        public async Task<ApiResult> DeleteUser()
+        {
+            await this.UserProvider.DeleteUserWithDependenciesAsync(User.Identity);
+            return new SuccessResult();
         }
 
         #region External Login

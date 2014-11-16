@@ -123,4 +123,7 @@
   <data name="UserAlreadyRegistered" xml:space="preserve">
     <value>User with an email '{0}' already exists</value>
   </data>
+  <data name="UserAlreadyVerified" xml:space="preserve">
+    <value>User has already been verified</value>
+  </data>
 </root>

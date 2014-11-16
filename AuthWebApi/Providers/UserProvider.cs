@@ -87,6 +87,12 @@ namespace AuthWebApi.Providers
             return this.UsersManager.GetAvatarAsync(userId);
         }
 
+        public Task<UserVerification> VerifyAsync(IIdentity identity)
+        {
+            int userId = Int32.Parse(identity.GetUserId());
+            return this.UsersManager.VerifyAsync(userId);
+        }
+
         public Task DeleteUserWithDependenciesAsync(IIdentity identity)
         {
             int userId = Int32.Parse(identity.GetUserId());

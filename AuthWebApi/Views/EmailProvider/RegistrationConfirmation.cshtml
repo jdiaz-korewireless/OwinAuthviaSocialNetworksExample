@@ -1,0 +1,16 @@
+﻿@using AuthDomain.Models.Account;
+
+@model UserVerification
+
+<p>Hi @Model.User.FullName!</p>
+
+<div>
+    <p>
+        Welcome to my website!
+    </p>
+    <p>
+        <div>Please use the following link to confirm your registration:</div>
+        <div style="padding-top:6px"><a style="text-decoration:none" href="@Request.Url.Scheme://@Request.Url.Authority/api/account/verifyConfirmation">Confirm</a></div>
+    </p>
+</div>
+

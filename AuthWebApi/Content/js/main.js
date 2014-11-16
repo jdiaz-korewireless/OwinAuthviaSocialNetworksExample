@@ -31,7 +31,7 @@ function getExternalProvidersListCallback(data) {
 
 /* Authenticate a user via an external provider */
 function extAuth(url) {
-    $('#userInfo').hide();
+    $('#info').hide();
     ExtAuthDialog.Tab.open(url);
 }
 
@@ -68,14 +68,26 @@ function registerExternal(tokenType, accessToken) {
 
 function registerExternalCallback(data)
 {
-    if (data["status"] == "error")
-    {
-        alert(data["statusmessage"]);
+    if (!checkStatus(data))
         return;
-    }
 
     var accessToken = data["accessToken"];
     showUserInfo(accessToken["type"], accessToken["value"], data["user"]);
+}
+
+/* Verify a registered user by sending him an email wiht a confirmation code */
+function verify(tokenType, accessToken) {
+    $.ajax({
+        type: "POST",
+        url: "api/account/verify",
+        dataType: 'json',
+        async: true,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
+        },
+        success: function (data) { showUserInfo(tokenType, accessToken, data); },
+        error: function (error) { executeActionFailCallback(error); }
+    });
 }
 
 /* Delete a registered user and all his dependencies */
@@ -88,17 +100,35 @@ function deleteUser(tokenType, accessToken) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
         },
-        success: function (data) { alert('Done'); $('#userInfo').hide(); },
+        success: function (result) { deleteUserCallback(result); },
         error: function (error) { executeActionFailCallback(error); }
     });
+}
+
+function deleteUserCallback(result)
+{
+    if (!checkStatus(result))
+        return;
+
+    showMessage("Account has been successfully deleted.<br/>" +
+        "A confirmation letter has been sent to your email.");
+}
+
+function showMessage(message)
+{
+    var messageHtml = "<div class=\"message\"><div>"
+        + message
+        + "</div></div>";
+
+    $('#info').html(messageHtml);
 }
 
 /* Generate a table with the user's information and available actions */
 function showUserInfo(tokenType, accessToken, userInfo)
 {
-    var userInfoDiv = $('#userInfo');
+    var userInfoDiv = $('#info');
 
-    var info = "<div><img src=\"" + userInfo["ava"] + "\" /></div>";
+    var info = "<div class=\"user\"><img src=\"" + userInfo["ava"] + "\" /></div>";
     info += "<p>" + "<strong>Email:</strong> " + userInfo["email"] + "</p>";
     info += "<p>" + "<strong>Name:</strong> " + userInfo["name"] + "</p>";
     info += "<p>" + "<strong>Provider:</strong> " + userInfo["provider"] + "</p>";
@@ -166,4 +196,15 @@ function executeActionFailCallback(error)
     $(".href").show();
 
     alert(JSON.stringify(error));
+}
+
+function checkStatus(result)
+{
+    if (result["status"] == "error")
+    {
+        executeActionFailCallback(result["statusmessage"]);
+        return false;
+    }
+
+    return true;
 }

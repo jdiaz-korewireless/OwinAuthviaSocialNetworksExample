@@ -95,7 +95,7 @@ namespace AuthWebApi.Providers.OAuthProviders
             if (isUpdated)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                context.Response.ReasonPhrase = Exceptions.PasswordChanged;
+                context.Response.ReasonPhrase = Exceptions.UserDataChanged;
             }
         }
 
