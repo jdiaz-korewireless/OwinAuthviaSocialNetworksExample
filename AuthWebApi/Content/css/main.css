@@ -51,6 +51,7 @@ div#userInfo > div > img
     width:150px;height:150px;border-radius:4px;-moz-border-radius:4px;
 }
 
+span.progress{color:#5FC0FE}
 span.href
 {
     text-decoration:none;color:#ccc;
