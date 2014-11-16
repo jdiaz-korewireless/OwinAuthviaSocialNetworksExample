@@ -194,6 +194,7 @@
     <Compile Include="HttpActionResult\ChallengeResult.cs" />
     <Compile Include="MediaTypeFormatters\BinaryMediaTypeFormatter.cs" />
     <Compile Include="MediaTypeFormatters\HelperFormatter.cs" />
+    <Compile Include="Models\Account\AccessToken.cs" />
     <Compile Include="Models\Account\ExternalLoginModel.cs" />
     <Compile Include="Models\Account\ExternalLoginProviderModel.cs" />
     <Compile Include="Models\Account\UserViewModel.cs" />
@@ -220,6 +221,7 @@
     </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\HttpHelper.cs" />
+    <Compile Include="Utils\OwinHelper.cs" />
     <Compile Include="Utils\RandomOAuthStateGenerator.cs" />
   </ItemGroup>
   <ItemGroup>

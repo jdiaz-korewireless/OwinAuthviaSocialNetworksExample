@@ -1,14 +1,11 @@
 ﻿using AuthDomain.Models.Account;
-using AuthWebApi.Providers.ClaimsMappingStrategies;
 using AuthWebApi.Resources;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
+using AuthWebApi.Utils;
 using Microsoft.Owin.Security.Infrastructure;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AuthWebApi.Providers.OAuthProviders
@@ -41,13 +38,7 @@ namespace AuthWebApi.Providers.OAuthProviders
                 return;
             }
 
-            ClaimsMapper claimsMapper = new RegisteredLocal(user);
-            ClaimsIdentity oAuthIdentity = this.UserProvider.CreateIdentity(claimsMapper, context.Options.AuthenticationType);
-            ClaimsIdentity cookiesIdentity = this.UserProvider.CreateIdentity(claimsMapper, CookieAuthenticationDefaults.AuthenticationType);
-            AuthenticationProperties properties = CreateProperties(user);
-            AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
-            context.Validated(ticket);
-            context.Request.Context.Authentication.SignIn(cookiesIdentity);
+            OwinHelper.SingIn(context, user);
         }
 
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
@@ -84,22 +75,6 @@ namespace AuthWebApi.Providers.OAuthProviders
             }
 
             return Task.FromResult<object>(null);
-        }
-
-        /// <summary>
-        /// Custom properties that will be returned to the client with an access_token
-        /// </summary>
-        /// <param name="user">User base info</param>
-        /// <returns>Properties</returns>
-        public static AuthenticationProperties CreateProperties(User user)
-        {
-            IDictionary<string, string> data = new Dictionary<string, string>
-            {
-                { "email", user.Email },
-                { "name", user.FullName ?? string.Empty },
-                { "ava", UserProvider.GetAvatarUrl(user) ?? string.Empty }
-            };
-            return new AuthenticationProperties(data);
         }
 
         public void Create(AuthenticationTokenCreateContext context)

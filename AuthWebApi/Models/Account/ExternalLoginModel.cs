@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNet.Identity;
-using AuthWebApi.Providers;
+﻿using AuthDomain.Models.Account;
+using AuthWebApi.Utils;
+using Microsoft.AspNet.Identity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Web;
-using AuthDomain.Models.Account;
 
 namespace AuthWebApi.Models.Account
 {
@@ -59,7 +56,7 @@ namespace AuthWebApi.Models.Account
                 result.FullName = identity.FindFirstValue(ClaimTypes.GivenName);
             }
 
-            result.AvatarUrl = identity.FindFirstValue(UserProvider.ClaimTypeAvatarUrl);
+            result.AvatarUrl = identity.FindFirstValue(OwinHelper.ClaimTypeAvatarUrl);
             return result;
         }
 

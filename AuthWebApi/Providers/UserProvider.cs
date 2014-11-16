@@ -1,11 +1,9 @@
 ﻿using AuthDomain.Logic;
 using AuthDomain.Models.Account;
 using AuthWebApi.Models.Account;
-using AuthWebApi.Providers.ClaimsMappingStrategies;
 using AuthWebApi.Utils;
 using Microsoft.AspNet.Identity;
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -14,29 +12,11 @@ namespace AuthWebApi.Providers
 {
     public class UserProvider
     {
-        public static string ClaimTypeAvatarUrl = "avatarUrl";
-        public static string ClaimTypeIsVerified = "isVerified";
-
         public UsersManager UsersManager { get; set; }
 
         public UserProvider()
         {
             this.UsersManager = new UsersManager();
-        }
-
-        public ClaimsIdentity CreateIdentity(ClaimsMapper claimsMapper, string authenticationType)
-        {
-            IList<Claim> claims = new List<Claim>();
-
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, claimsMapper.Id, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
-            claims.Add(new Claim(ClaimTypes.Email, claimsMapper.Email, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
-            claims.Add(new Claim(ClaimTypes.GivenName, claimsMapper.FullName, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
-            claims.Add(new Claim(ClaimTypes.Sid, claimsMapper.Sid, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
-            claims.Add(new Claim(ClaimTypes.Version, claimsMapper.Version, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
-            claims.Add(new Claim(ClaimTypeIsVerified, claimsMapper.IsVerified, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
-            claims.Add(new Claim(ClaimTypeAvatarUrl, claimsMapper.AvatarUrl, null, claimsMapper.Issuer, claimsMapper.OriginalIssuer));
-
-            return new ClaimsIdentity(claims, authenticationType);
         }
 
         public bool IsRegisteredUserUpdated(ClaimsIdentity claimsIdentity)
@@ -64,14 +44,7 @@ namespace AuthWebApi.Providers
             if (userIdClaim.Issuer != ClaimsIdentity.DefaultIssuer)
                 return null;
 
-            return new User
-            {
-                Id = Int32.Parse(userIdClaim.Value),
-                Email = claimsIdentity.FindFirstValue(ClaimTypes.Email),
-                FullName = claimsIdentity.FindFirstValue(ClaimTypes.GivenName),
-                IsVerified = Boolean.Parse(claimsIdentity.FindFirstValue(ClaimTypeIsVerified)),
-                TimeStamp = ClaimsMapper.GetTimeStamp(claimsIdentity.FindFirstValue(ClaimTypes.Version))
-            };
+            return OwinHelper.CreateUser(claimsIdentity);
         }
 
         public Task<User> FindAsync(IIdentity identity)
@@ -92,7 +65,7 @@ namespace AuthWebApi.Providers
             return this.UsersManager.GetUserAsync(loginProvider, providerKey);
         }
 
-        public async Task<UserViewModel> CreateExternalAsync(ExternalLoginModel externalInfo)
+        public async Task<User> CreateExternalAsync(ExternalLoginModel externalInfo)
         {
             var userRegistration = new UserRegistration()
             {
@@ -106,8 +79,7 @@ namespace AuthWebApi.Providers
                 }
             };
 
-            var user = await this.UsersManager.CreateUserAsync(userRegistration);
-            return MapUserToViewModel(user, externalInfo.Provider.ToString());
+            return await this.UsersManager.CreateUserAsync(userRegistration);
         }
 
         public Task<byte[]> GetAvatarAsync(int userId)
@@ -130,7 +102,7 @@ namespace AuthWebApi.Providers
             return client.GetByteArrayAsync(externalInfo.AvatarUrl);
         }
 
-        private static UserViewModel MapUserToViewModel(User user, string loginProvider)
+        public static UserViewModel MapUserToViewModel(User user, ExternalLoginModel externalLogin)
         {
             return new UserViewModel
             {
@@ -139,7 +111,7 @@ namespace AuthWebApi.Providers
                 IsVerified = user.IsVerified,
                 AvatarUrl = GetAvatarUrl(user),
                 IsRegistered = true,
-                LoginProvider = loginProvider
+                LoginProvider = externalLogin.Provider.ToString()
             };
         }
 

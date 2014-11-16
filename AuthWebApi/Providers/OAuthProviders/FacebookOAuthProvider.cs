@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.Security.Facebook;
+﻿using AuthWebApi.Utils;
+using Microsoft.Owin.Security.Facebook;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace AuthWebApi.Providers.OAuthProviders
         {
             string avatarUrl = GetAvatarUrl(context.User.GetValue("id").ToString(), 240);
             context.Identity.AddClaim(
-                new Claim(UserProvider.ClaimTypeAvatarUrl, avatarUrl));
+                new Claim(OwinHelper.ClaimTypeAvatarUrl, avatarUrl));
 
             return base.Authenticated(context);
         }

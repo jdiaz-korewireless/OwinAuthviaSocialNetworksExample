@@ -16,7 +16,9 @@ begin
 	insert into [dbo].[User] ([Email], [Password], [FullName], [CreatedDate], [UpdatedDate], [VerifyEmailCode])
 	values (@email, @password, @fullName, @createdDate, @updatedDate, @verifyEmailCode)
 
-	select SCOPE_IDENTITY()
+	declare @userId int = SCOPE_IDENTITY()
+
+	exec [dbo].[spGetUserById] @userId
 end
 
 

@@ -48,15 +48,7 @@ namespace AuthDomain.Dal
                 cmd.Parameters.AddWithValue("userId", userId);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                using (var sqlDataReader = cmd.ExecuteReader())
-                {
-                    var users = MapUsersFromDb(sqlDataReader);
-
-                    if (users.Count > 1)
-                        throw new InvalidOperationException(string.Format(Exceptions.MoreThanOneUserFoundById, userId));
-
-                    return users.SingleOrDefault();
-                }
+                return GetSingleUser(cmd);
             }
         }
 
@@ -67,15 +59,7 @@ namespace AuthDomain.Dal
                 cmd.Parameters.AddWithValue("email", email);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                using (var sqlDataReader = cmd.ExecuteReader())
-                {
-                    var users = MapUsersFromDb(sqlDataReader);
-
-                    if (users.Count > 1)
-                        throw new InvalidOperationException(string.Format(Exceptions.MoreThanOneUserFoundByEmail, email));
-
-                    return users.SingleOrDefault();
-                }
+                return GetSingleUser(cmd);
             }
         }
 
@@ -87,15 +71,7 @@ namespace AuthDomain.Dal
                 cmd.Parameters.AddWithValue("providerKey", providerKey);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                using (var sqlDataReader = cmd.ExecuteReader())
-                {
-                    var users = MapUsersFromDb(sqlDataReader);
-
-                    if (users.Count > 1)
-                        throw new InvalidOperationException(string.Format(Exceptions.MoreThanOneUserFoundByExtProvider, loginProvider, providerKey));
-
-                    return users.SingleOrDefault();
-                }
+                return GetSingleUser(cmd);
             }
         }
 
@@ -125,19 +101,7 @@ namespace AuthDomain.Dal
                 cmd.Parameters.AddWithValue("verifyEmailCode", verifyEmailCode);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                int userId = Convert.ToInt32(cmd.ExecuteScalar());
-
-                return new UserDb()
-                {
-                    Id = userId,
-                    Email = userRegistration.Email,
-                    Password = userRegistration.Password,
-                    FullName = userRegistration.FullName,
-                    CreatedDate = createdDate,
-                    TimeStamp = createdDate,
-                    VerifyEmailCode = verifyEmailCode,
-                    IsVerified = false
-                };
+                return GetSingleUser(cmd);
             }
         }
 
@@ -192,6 +156,15 @@ namespace AuthDomain.Dal
         private static SqlConnection CreateSqlConnection()
         {
             return new SqlConnection(ConfigurationManager.ConnectionStrings["AuthDB"].ConnectionString);
+        }
+
+        private static UserDb GetSingleUser(SqlCommand cmd)
+        {
+            using (var sqlDataReader = cmd.ExecuteReader())
+            {
+                var users = MapUsersFromDb(sqlDataReader);
+                return users.SingleOrDefault();
+            }
         }
 
         private static IList<UserDb> MapUsersFromDb(SqlDataReader sqlDataReader)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.Security.Google;
+﻿using AuthWebApi.Utils;
+using Microsoft.Owin.Security.Google;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace AuthWebApi.Providers.OAuthProviders
                 .Replace("sz=50", "sz=240");
 
             context.Identity.AddClaim(
-                new Claim(UserProvider.ClaimTypeAvatarUrl, avatarUrl));
+                new Claim(OwinHelper.ClaimTypeAvatarUrl, avatarUrl));
 
             return base.Authenticated(context);
         }

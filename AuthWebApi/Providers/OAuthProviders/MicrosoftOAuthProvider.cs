@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.Security.MicrosoftAccount;
+﻿using AuthWebApi.Utils;
+using Microsoft.Owin.Security.MicrosoftAccount;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -23,7 +24,7 @@ namespace AuthWebApi.Providers.OAuthProviders
                             context.User.GetValue("id").ToString());
 
             context.Identity.AddClaim(
-                new Claim(UserProvider.ClaimTypeAvatarUrl, avatarUrl));
+                new Claim(OwinHelper.ClaimTypeAvatarUrl, avatarUrl));
 
             return base.Authenticated(context);
         }

@@ -4,8 +4,6 @@ using AuthWebApi.HttpActionResult;
 using AuthWebApi.Models;
 using AuthWebApi.Models.Account;
 using AuthWebApi.Providers;
-using AuthWebApi.Providers.ClaimsMappingStrategies;
-using AuthWebApi.Providers.OAuthProviders;
 using AuthWebApi.Resources;
 using AuthWebApi.Utils;
 using Microsoft.AspNet.Identity;
@@ -36,7 +34,7 @@ namespace AuthWebApi.Controllers
         // GET api/account/user
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("user")]
-        public ApiResult GetUser()
+        public UserViewModel GetUser()
         {
             ClaimsIdentity userIdentity = User.Identity as ClaimsIdentity;
             ExternalLoginModel externalLogin = ExternalLoginModel.FromIdentity(userIdentity);
@@ -45,13 +43,13 @@ namespace AuthWebApi.Controllers
             {
                 Email = userIdentity.FindFirstValue(ClaimTypes.Email),
                 FullName = userIdentity.FindFirstValue(ClaimTypes.GivenName),
-                IsVerified = Boolean.Parse(userIdentity.FindFirstValue(UserProvider.ClaimTypeIsVerified)),
-                AvatarUrl = userIdentity.FindFirstValue(UserProvider.ClaimTypeAvatarUrl),
+                IsVerified = Boolean.Parse(userIdentity.FindFirstValue(OwinHelper.ClaimTypeIsVerified)),
+                AvatarUrl = userIdentity.FindFirstValue(OwinHelper.ClaimTypeAvatarUrl),
                 IsRegistered = (externalLogin == null || externalLogin.IsRegistered),
                 LoginProvider = (externalLogin != null ? externalLogin.Provider.ToString() : null)
             };
 
-            return new UserResult(user);
+            return user;
         }
 
         // DELETE api/account        
@@ -126,18 +124,11 @@ namespace AuthWebApi.Controllers
             User user = await this.UserProvider.FindAsync(externalLogin.Provider, externalLogin.ProviderKey);
             if (user != null)
             {
-                Request.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                ClaimsMapper claimsMapper = new RegisteredExternal(user, externalLogin);
-                ClaimsIdentity oAuthIdentity = this.UserProvider.CreateIdentity(claimsMapper, OAuthDefaults.AuthenticationType);
-                ClaimsIdentity cookieIdentity = this.UserProvider.CreateIdentity(claimsMapper, CookieAuthenticationDefaults.AuthenticationType);
-                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user);
-                Request.GetOwinContext().Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
+                OwinHelper.SingIn(Request.GetOwinContext(), user, externalLogin);
             }
             else
             {
-                ClaimsMapper claimsMapper = new NotRegisteredExternal(externalLogin);
-                ClaimsIdentity identity = this.UserProvider.CreateIdentity(claimsMapper, OAuthDefaults.AuthenticationType);
-                Request.GetOwinContext().Authentication.SignIn(identity);
+                OwinHelper.SingIn(Request.GetOwinContext(), externalLogin);
             }
 
             return Ok();
@@ -193,7 +184,7 @@ namespace AuthWebApi.Controllers
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("registerExternal")]
-        public async Task<UserResult> RegisterExternal()
+        public async Task<RegistrationResult> RegisterExternal()
         {
             ExternalLoginModel externalLogin = ExternalLoginModel.FromIdentity(User.Identity as ClaimsIdentity);
 
@@ -202,8 +193,13 @@ namespace AuthWebApi.Controllers
                 throw new ApiException(Exceptions.ExternalLoginNotFound);
             }
 
-            var result = await this.UserProvider.CreateExternalAsync(externalLogin);
-            return new UserResult(result);
+            var user = await this.UserProvider.CreateExternalAsync(externalLogin);
+            var userViewModel = UserProvider.MapUserToViewModel(user, externalLogin);
+
+            OwinHelper.SingIn(Request.GetOwinContext(), user, externalLogin);
+            var token = OwinHelper.CreateToken(Request.GetOwinContext(), user, externalLogin);
+
+            return new RegistrationResult(userViewModel, token);
         }
 
         #endregion

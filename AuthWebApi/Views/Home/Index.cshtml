@@ -29,6 +29,7 @@
                 });
 
                 var div = jQuery('<div/>', {
+                    id: "extPr-" + value.name,
                     title: value.name + ' authentication',
                     onclick: "javascript:extAuth('" + value.url + "');",
                 });
@@ -61,15 +62,8 @@
             });
         }
 
-        function showUserInfo(tokenType, accessToken, data)
+        function showUserInfo(tokenType, accessToken, userInfo)
         {
-            if (data["status"] == "error")
-            {
-                alert(data["statusmessage"]);
-                return;
-            }
-
-            var userInfo = data["user"];
             var userInfoDiv = $('#userInfo');
 
             var info = "<div><img src=\"" + userInfo["ava"] + "\" /></div>";
@@ -110,9 +104,22 @@
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", tokenType + " " + accessToken);
                 },
-                success: function (data) { showUserInfo(tokenType, accessToken, data); },
+                success: function (data) { registrationCallback(data); },
                 error: function (error) { alert(JSON.stringify(error)); }
             });
+        }
+
+        function registrationCallback(data)
+        {
+            if (data["status"] == "error")
+            {
+                alert(data["statusmessage"]);
+                return;
+            }
+
+            var accessToken = data["accessToken"];
+            alert(accessToken["type"] + " " + accessToken["value"]);
+            showUserInfo(accessToken["type"], accessToken["value"], data["user"]);
         }
 
         function deleteUser(tokenType, accessToken) {

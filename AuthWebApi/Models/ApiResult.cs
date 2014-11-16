@@ -40,14 +40,18 @@ namespace AuthWebApi.Models
         }
     }
 
-    public class UserResult : SuccessResult
+    public class RegistrationResult : SuccessResult
     {
         [JsonProperty("user")]
         public UserViewModel User { get; set; }
 
-        public UserResult(UserViewModel user)
+        [JsonProperty("accessToken")]
+        public AccessToken AccessToken { get; set; }
+
+        public RegistrationResult(UserViewModel user, AccessToken accessToken)
         {
             User = user;
+            AccessToken = accessToken;
         }
     }
 }
