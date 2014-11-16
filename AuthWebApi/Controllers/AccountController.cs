@@ -74,25 +74,25 @@ namespace AuthWebApi.Controllers
 
         // POST api/account/verify
         [Route("verify")]
-        public async Task<ApiResult> Verify()
+        public async Task<NotificationResult> Verify()
         {
             var userVerification = await this.UserProvider.VerifyAsync(User.Identity);
 
             this.EmailProvider.SendConfirmationCodeAsync(userVerification);
 
-            return new SuccessResult();
+            return new NotificationResult(userVerification.User.Email);
         }
 
         // DELETE api/account        
         [Route("user")]
-        public async Task<ApiResult> DeleteUser()
+        public async Task<NotificationResult> DeleteUser()
         {
             var user = OwinHelper.CreateUser(User.Identity as ClaimsIdentity);
 
             await this.UserProvider.DeleteUserWithDependenciesAsync(user);
             this.EmailProvider.SendDeleteConfirmationAsync(user);
 
-            return new SuccessResult();
+            return new NotificationResult(user.Email);
         }
 
         #region External Login

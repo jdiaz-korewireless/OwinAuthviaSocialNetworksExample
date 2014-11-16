@@ -40,6 +40,17 @@ namespace AuthWebApi.Models
         }
     }
 
+    public class NotificationResult : SuccessResult
+    {
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        public NotificationResult(string email)
+        {
+            this.Email = email;
+        }
+    }
+
     public class RegistrationResult : SuccessResult
     {
         [JsonProperty("user")]

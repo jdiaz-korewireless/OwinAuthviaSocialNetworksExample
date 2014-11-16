@@ -84,9 +84,22 @@ function verify() {
         dataType: 'json',
         async: true,
         beforeSend: function (xhr) { setRequestHeaders(xhr); },
-        success: function (data) { showUserInfo(data); },
+        success: function (result) { verifyCallback(result); },
         error: function (error) { executeActionFailCallback(error); }
     });
+}
+
+function verifyCallback(result)
+{
+    if (!checkStatus(result))
+        return;
+
+    resetToken();
+
+    showMessage("A confirmation email has been sent to<br/><strong>"
+        + result["email"]
+        + "</strong><br/><br/>"
+        + "After the registration is confirmed, please, sign-in again.");
 }
 
 /* Delete a registered user and all his dependencies */
@@ -110,8 +123,10 @@ function deleteUserCallback(result)
 
     resetToken();
 
-    showMessage("Account has been successfully deleted.<br/>" +
-        "A confirmation letter has been sent to your email.");
+    showMessage("Account has been successfully deleted.<br/><br/>" +
+        "A confirmation email has been sent to<br/><strong>"
+        + result["email"]
+        + "</strong>");
 }
 
 function showMessage(message)
