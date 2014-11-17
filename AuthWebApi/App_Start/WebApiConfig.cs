@@ -36,7 +36,7 @@ namespace AuthWebApi
             config.Filters.Add(new AuthorizeAndCheckAttribute());
 
             //Razor Engine layout support
-            RazorLayouts.AddMainaLayout();
+            RazorLayouts.AddMainLayout();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace AuthWebApi.Utils
 {
     public static class RazorLayouts
     {
-        public static void AddMainaLayout()
+        public static void AddMainLayout()
         {
             AddLayout("_Layout.cshtml", "~/Views/Shared/_Layout.cshtml");
         }
