@@ -1,5 +1,6 @@
 ﻿using AuthDomain;
 using AuthDomain.Models.Account;
+using AuthWebApi.FilterAttributes;
 using AuthWebApi.HttpActionResult;
 using AuthWebApi.Models;
 using AuthWebApi.Models.Account;
@@ -74,13 +75,26 @@ namespace AuthWebApi.Controllers
 
         // POST api/account/verify
         [Route("verify")]
-        public async Task<NotificationResult> Verify()
+        public async Task<NotificationResult> VerifyRegistration()
         {
-            var userVerification = await this.UserProvider.VerifyAsync(User.Identity);
+            var userVerification = await this.UserProvider.GetVerificationCodesAsync(User.Identity);
 
-            this.EmailProvider.SendConfirmationCodeAsync(userVerification);
+            this.EmailProvider.SendVerificationCodesAsync(userVerification);
 
             return new NotificationResult(userVerification.User.Email);
+        }
+
+        // GET api/account/confirm?email=aa@a.com&code=1234
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("confirm")]
+        [ShowViewOnErrorAttribute(ControllerName = "EmailProvider", ViewName = "RegistrationConfirmError")]
+        public async Task<HttpResponseMessage> ConfirmRegistration(string email, Guid code)
+        {
+            var user = await this.UserProvider.CheckVerificationCodesAsync(email, code);
+            this.EmailProvider.SendConfirmedAsync(user);
+
+            return this.View("EmailProvider", "RegistrationConfirmed", user);
         }
 
         // DELETE api/account        

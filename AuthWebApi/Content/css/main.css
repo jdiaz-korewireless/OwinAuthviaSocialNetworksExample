@@ -4,10 +4,10 @@
 }
 strong{color:#fff;font-weight:normal;}
 
+div#main{display:inline-block;}
 
-div#main{
-    display:inline-block;
-}
+div.logo {position:absolute;bottom:30px;right:20px;cursor:pointer}
+div.logo > img {border-radius: 60px;-moz-border-radius: 60px;}
 
 /*====================== External Providers List ======================*/
 div#extProviders

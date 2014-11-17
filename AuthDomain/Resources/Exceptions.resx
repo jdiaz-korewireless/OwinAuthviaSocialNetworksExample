@@ -126,4 +126,10 @@
   <data name="UserAlreadyVerified" xml:space="preserve">
     <value>User has already been verified</value>
   </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Specified user was not found</value>
+  </data>
+  <data name="VerifyCodesDidntMatch" xml:space="preserve">
+    <value>Verification codes didn't match</value>
+  </data>
 </root>

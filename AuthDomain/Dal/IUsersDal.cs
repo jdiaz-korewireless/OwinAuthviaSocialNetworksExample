@@ -25,6 +25,8 @@ namespace AuthDomain.Dal
 
         void CreateUserAvatar(SqlTransaction transaction, int userId, byte[] avatar);
 
+        UserDb UpdateUser(SqlTransaction transaction, UserDb user);
+
         void UpdateUserAvatar(SqlTransaction transaction, int userId, byte[] avatar);
 
         void DeleteUserWithDependencies(SqlTransaction transaction, int userId);

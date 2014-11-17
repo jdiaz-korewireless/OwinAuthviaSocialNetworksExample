@@ -13,7 +13,7 @@ namespace AuthWebApi.Providers
             base.MasterName = "_MailLayout";
         }
 
-        public void SendConfirmationCodeAsync(UserVerification userVerification)
+        public void SendVerificationCodesAsync(UserVerification userVerification)
         {
             if (userVerification == null)
                 throw new ArgumentNullException("userVerification");
@@ -24,6 +24,22 @@ namespace AuthWebApi.Providers
                 x.Subject = Emails.RegistrationConfirmation;
                 x.ViewName = "RegistrationConfirmation";
                 x.To.Add(userVerification.User.Email);
+            });
+
+            Task.Factory.StartNew(() => mailMessage.Send());
+        }
+
+        public void SendConfirmedAsync(User user)
+        {
+            if (user == null)
+                throw new ArgumentNullException("user");
+
+            ViewData.Model = user;
+            var mailMessage = Populate(x =>
+            {
+                x.Subject = Emails.RegistrationConfirmed;
+                x.ViewName = "RegistrationConfirmed";
+                x.To.Add(user.Email);
             });
 
             Task.Factory.StartNew(() => mailMessage.Send());

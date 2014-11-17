@@ -87,10 +87,15 @@ namespace AuthWebApi.Providers
             return this.UsersManager.GetAvatarAsync(userId);
         }
 
-        public Task<UserVerification> VerifyAsync(IIdentity identity)
+        public Task<UserVerification> GetVerificationCodesAsync(IIdentity identity)
         {
             int userId = Int32.Parse(identity.GetUserId());
-            return this.UsersManager.VerifyAsync(userId);
+            return this.UsersManager.GetVerificationCodesAsync(userId);
+        }
+
+        public Task<User> CheckVerificationCodesAsync(string email, Guid verifyEmailCode)
+        {
+            return this.UsersManager.CheckVerificationCodesAsync(email, verifyEmailCode);
         }
 
         public Task DeleteUserWithDependenciesAsync(User user)

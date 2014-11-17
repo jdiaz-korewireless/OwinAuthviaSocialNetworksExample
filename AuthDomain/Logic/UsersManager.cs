@@ -1,6 +1,7 @@
 ﻿using AuthDomain.Dal;
 using AuthDomain.Models.Account;
 using AuthDomain.Resources;
+using System;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -22,7 +23,12 @@ namespace AuthDomain.Logic
                 return this.UsersDal.Execute(IsolationLevel.ReadCommitted,
                 (tran) =>
                 {
-                    return this.UsersDal.GetUser(tran, userId);
+                    //Check user exists
+                    var user = this.UsersDal.GetUser(tran, userId);
+                    if (user == null)
+                        throw new ApiException(Exceptions.UserNotFound);
+
+                    return user;
                 });
             });
         }
@@ -97,14 +103,17 @@ namespace AuthDomain.Logic
             });
         }
 
-        public Task<UserVerification> VerifyAsync(int userId)
+        public Task<UserVerification> GetVerificationCodesAsync(int userId)
         {
             return Task<UserVerification>.Factory.StartNew(() =>
             {
                 return this.UsersDal.Execute(IsolationLevel.ReadCommitted,
                 (tran) =>
                 {
+                    //Check user exists
                     var user = this.UsersDal.GetUser(tran, userId);
+                    if (user == null)
+                        throw new ApiException(Exceptions.UserNotFound);
 
                     if (user.IsVerified)
                         throw new ApiException(Exceptions.UserAlreadyVerified);
@@ -114,6 +123,32 @@ namespace AuthDomain.Logic
                         User = user,
                         VerifyEmailCode = user.VerifyEmailCode.Value
                     };
+                });
+            });
+        }
+
+        public Task<User> CheckVerificationCodesAsync(string email, Guid verifyEmailCode)
+        {
+            return Task<User>.Factory.StartNew(() =>
+            {
+                return this.UsersDal.Execute(IsolationLevel.Snapshot,
+                (tran) =>
+                {
+                    //Check user exists
+                    var user = this.UsersDal.GetUser(tran, email);
+                    if (user == null)
+                        throw new ApiException(Exceptions.UserNotFound);
+
+                    if (user.IsVerified)
+                        throw new ApiException(Exceptions.UserAlreadyVerified);
+
+                    if (user.VerifyEmailCode != verifyEmailCode)
+                        throw new ApiException(Exceptions.VerifyCodesDidntMatch);
+
+                    user.VerifyEmailCode = null;
+                    user = this.UsersDal.UpdateUser(tran, user);
+
+                    return user;
                 });
             });
         }

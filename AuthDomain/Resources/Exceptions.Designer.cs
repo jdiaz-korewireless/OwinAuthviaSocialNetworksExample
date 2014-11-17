@@ -86,5 +86,23 @@ namespace AuthDomain.Resources {
                 return ResourceManager.GetString("UserAlreadyVerified", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specified user was not found.
+        /// </summary>
+        internal static string UserNotFound {
+            get {
+                return ResourceManager.GetString("UserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification codes didn&apos;t match.
+        /// </summary>
+        internal static string VerifyCodesDidntMatch {
+            get {
+                return ResourceManager.GetString("VerifyCodesDidntMatch", resourceCulture);
+            }
+        }
     }
 }

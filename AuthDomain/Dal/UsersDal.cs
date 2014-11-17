@@ -130,6 +130,23 @@ namespace AuthDomain.Dal
             }
         }
 
+        public UserDb UpdateUser(SqlTransaction transaction, UserDb user)
+        {
+            using (var cmd = new SqlCommand("[dbo].[spUpdateUser]", transaction.Connection, transaction))
+            {
+                var updatedDate = DateTime.Now;
+
+                cmd.Parameters.AddWithValue("userId", user.Id);
+                cmd.Parameters.AddWithValue("password", NullableValue(user.Password));
+                cmd.Parameters.AddWithValue("fullName", NullableValue(user.FullName));
+                cmd.Parameters.AddWithValue("updatedDate", updatedDate);
+                cmd.Parameters.AddWithValue("verifyEmailCode", NullableValue(user.VerifyEmailCode));
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                return GetSingleUser(cmd);
+            }
+        }
+
         public void UpdateUserAvatar(SqlTransaction transaction, int userId, byte[] avatar)
         {
             using (var cmd = new SqlCommand("[dbo].[spUpdateUserAvatar]", transaction.Connection, transaction))

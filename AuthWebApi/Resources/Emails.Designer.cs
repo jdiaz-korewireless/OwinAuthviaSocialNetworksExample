@@ -77,5 +77,14 @@ namespace AuthWebApi.Resources {
                 return ResourceManager.GetString("RegistrationConfirmation", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SupperSlonic registration confirmed.
+        /// </summary>
+        internal static string RegistrationConfirmed {
+            get {
+                return ResourceManager.GetString("RegistrationConfirmed", resourceCulture);
+            }
+        }
     }
 }

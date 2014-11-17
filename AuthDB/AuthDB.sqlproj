@@ -74,6 +74,7 @@
     <Build Include="Procedures\spUpdateUserAvatar.sql" />
     <Build Include="Procedures\spGetUserById.sql" />
     <Build Include="Procedures\spGetUserAvatar.sql" />
+    <Build Include="Procedures\spUpdateUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="InitDB.sql" />

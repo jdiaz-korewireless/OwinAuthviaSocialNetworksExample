@@ -167,9 +167,11 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\ExtAuthRequest.cshtml" />
-    <Content Include="Views\EmailProvider\_MailLayout.cshtml" />
     <Content Include="Views\EmailProvider\RegistrationConfirmation.cshtml" />
     <Content Include="Views\EmailProvider\DeleteConfirmation.cshtml" />
+    <Content Include="Views\EmailProvider\RegistrationConfirmed.cshtml" />
+    <Content Include="Views\EmailProvider\RegistrationConfirmError.cshtml" />
+    <Content Include="Views\Shared\_MailLayout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -234,6 +236,7 @@
     <Compile Include="Utils\HttpHelper.cs" />
     <Compile Include="Utils\OwinHelper.cs" />
     <Compile Include="Utils\RandomOAuthStateGenerator.cs" />
+    <Compile Include="Utils\RazorLayouts.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Credentials.resx">

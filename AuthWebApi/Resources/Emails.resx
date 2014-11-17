@@ -123,4 +123,7 @@
   <data name="RegistrationConfirmation" xml:space="preserve">
     <value>SupperSlonic registration confirmation</value>
   </data>
+  <data name="RegistrationConfirmed" xml:space="preserve">
+    <value>SupperSlonic registration confirmed</value>
+  </data>
 </root>
