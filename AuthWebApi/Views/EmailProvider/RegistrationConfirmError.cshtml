@@ -1,6 +1,6 @@
 ﻿@{Layout = "_Layout.cshtml";}
 
-<div class="main">
-    Registration <strong>has not been confirmed</strong>.<br />
-    An error has occurred: [@Model]
+<div class="main" style="margin-top:20px">
+    <p>Registration <strong>has not been confirmed</strong>.</p>
+    <p>An error has occurred: [<span class="error">@Model</span>]</p>
 </div>

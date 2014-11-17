@@ -4,7 +4,8 @@
 }
 strong{color:#fff;font-weight:normal;}
 
-div#main{display:inline-block;}
+div.main{display:inline-block;}
+span.error{color:#EA2703}
 
 div.logo {position:absolute;bottom:30px;right:20px;cursor:pointer}
 div.logo > img {border-radius: 60px;-moz-border-radius: 60px;}
@@ -62,6 +63,9 @@ div#info > div.message > div{
 
 div#info > div.message strong {color:#5FC0FE;}
 
+ul.verified {list-style:none;display:inline-block;padding-left:0px;margin-top:0px}
+ul.verified li {padding-left:18px;color:white;font-size:13px;background:transparent url(../img/check16.png) 0 0 no-repeat;}
+
 span.progress{color:#5FC0FE}
 span.href
 {
@@ -71,7 +75,6 @@ span.href
     cursor:pointer;
 }
 span.href:hover{text-decoration:none;color:#fff;}
-
 /*====================== External Authentication Request page ======================*/
 div#extAuthRequestSending
 {

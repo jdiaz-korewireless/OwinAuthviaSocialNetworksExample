@@ -158,7 +158,7 @@ function showUserInfo(userInfo)
         //  if not verified -> verify by sending an email with a confirmation code
         if (userInfo["verified"] == true)
         {
-            info += "<span>Verified</span>";
+            info += "<ul class=\"verified\"><li>Verified</li></ul>";
         }
         else
         {
@@ -197,7 +197,7 @@ function generateActionLink(text, activeText, actionName, style)
 
 function executeAction(id, action)
 {
-    $(".href").hide();
+    $(".href,.verified").hide();
     $("#progress-" + id).show();
 
     action();
@@ -206,7 +206,7 @@ function executeAction(id, action)
 function executeActionFailCallback(error)
 {
     $(".progress").hide();
-    $(".href").show();
+    $(".href,.verified").show();
 
     alert(JSON.stringify(error));
 }

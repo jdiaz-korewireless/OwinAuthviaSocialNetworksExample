@@ -82,7 +82,7 @@ namespace AuthDomain.Dal
                 cmd.Parameters.AddWithValue("userId", userId);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                return (byte[])NullableValue(cmd.ExecuteScalar());
+                return GetObjectOrNull<byte[]>(cmd.ExecuteScalar());
             }
         }
 
@@ -94,8 +94,8 @@ namespace AuthDomain.Dal
                 var verifyEmailCode = Guid.NewGuid();
 
                 cmd.Parameters.AddWithValue("email", userRegistration.Email);
-                cmd.Parameters.AddWithValue("password", NullableValue(userRegistration.Password));
-                cmd.Parameters.AddWithValue("fullName", NullableValue(userRegistration.FullName));
+                cmd.Parameters.AddWithValue("password", ToSqlNullable(userRegistration.Password));
+                cmd.Parameters.AddWithValue("fullName", ToSqlNullable(userRegistration.FullName));
                 cmd.Parameters.AddWithValue("createdDate", createdDate);
                 cmd.Parameters.AddWithValue("updatedDate", createdDate);
                 cmd.Parameters.AddWithValue("verifyEmailCode", verifyEmailCode);
@@ -137,10 +137,10 @@ namespace AuthDomain.Dal
                 var updatedDate = DateTime.Now;
 
                 cmd.Parameters.AddWithValue("userId", user.Id);
-                cmd.Parameters.AddWithValue("password", NullableValue(user.Password));
-                cmd.Parameters.AddWithValue("fullName", NullableValue(user.FullName));
+                cmd.Parameters.AddWithValue("password", ToSqlNullable(user.Password));
+                cmd.Parameters.AddWithValue("fullName", ToSqlNullable(user.FullName));
                 cmd.Parameters.AddWithValue("updatedDate", updatedDate);
-                cmd.Parameters.AddWithValue("verifyEmailCode", NullableValue(user.VerifyEmailCode));
+                cmd.Parameters.AddWithValue("verifyEmailCode", ToSqlNullable(user.VerifyEmailCode));
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 return GetSingleUser(cmd);
@@ -191,14 +191,14 @@ namespace AuthDomain.Dal
             while (sqlDataReader.Read())
             {
                 int userId = (int)sqlDataReader["Id"];
-                Guid? verifyEmailCode = (Guid?)NullableValue(sqlDataReader["VerifyEmailCode"]);
+                Guid? verifyEmailCode = GetValueOrNull<Guid>(sqlDataReader["VerifyEmailCode"]);
 
                 var user = new UserDb()
                 {
                     Id = userId,
                     Email = (string)sqlDataReader["Email"],
-                    Password = (string)NullableValue(sqlDataReader["Password"]),
-                    FullName = (string)NullableValue(sqlDataReader["FullName"]),
+                    Password = GetObjectOrNull<string>(sqlDataReader["Password"]),
+                    FullName = GetObjectOrNull<string>(sqlDataReader["FullName"]),
                     CreatedDate = (DateTime)sqlDataReader["CreatedDate"],
                     TimeStamp = (DateTime)sqlDataReader["UpdatedDate"],
                     VerifyEmailCode = verifyEmailCode,
@@ -211,20 +211,22 @@ namespace AuthDomain.Dal
             return result;
         }
 
-        private static object NullableValue(string value)
+        private static object ToSqlNullable<T>(T value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value == null)
                 return DBNull.Value;
             else
-                return value.Trim();
+                return value;
         }
 
-        private static object NullableValue(object value)
+        public static T GetObjectOrNull<T>(object value) where T : class
         {
-            if (value == DBNull.Value)
-                return null;
-            else
-                return value;
+            return (value is DBNull) ? (T)null : (T)value;
+        }
+
+        public static Nullable<T> GetValueOrNull<T>(object value) where T : struct
+        {            
+            return (value is DBNull) ? (Nullable<T>)null : (T)value;
         }
     }
 }
