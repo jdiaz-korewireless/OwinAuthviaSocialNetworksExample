@@ -13,6 +13,21 @@ function getExternalProvidersList() {
 function getExternalProvidersListCallback(data) {
     var extProviders = $('#extProviders');
 
+    //By PASS auth
+    var passImg = jQuery('<img/>', {
+        src: "../Content/img/Password.png"
+    });
+
+    var passDiv = jQuery('<div/>', {
+        id: "passAuth",
+        title: 'Password authentication',
+        onclick: "javascript:byPassAuth();",
+    });
+
+    passImg.appendTo(passDiv);
+    passDiv.appendTo(extProviders);
+
+    //External Providers auth
     $.each(data, function (key, value) {
         var img = jQuery('<img/>', {
             src: "../Content/img/" + value.name + ".png"
@@ -36,6 +51,26 @@ function extAuth(url)
     $('#info').hide();
 
     window.location = "ExtAuthRequest#url=" + url;
+}
+
+/* Authenticate a user via PASSWORD */
+function byPassAuth()
+{
+    resetToken();
+    $('#info').hide();
+
+    var email = "natalia.a.zelenskaya@gmail.com";
+    var pass = "lala";
+
+    $.ajax({
+        type: "POST",
+        url: "/api/token",
+        contentType: 'application/x-www-form-urlencoded',
+        data: "grant_type=password&username=" + email + "&password=" + pass,
+        async: true,
+        success: function (data) { alert(JSON.stringify(data)); },
+        error: function (error) { alert(JSON.stringify(error)); }
+    });
 }
 
 function getUserInfo()

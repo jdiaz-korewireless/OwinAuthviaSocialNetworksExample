@@ -35,6 +35,23 @@ namespace AuthDomain.Logic
             });
         }
 
+        public Task<User> GetUserAsync(string email, string password)
+        {
+            return Task<User>.Factory.StartNew(() =>
+            {
+                return this.BaseDal.Execute(IsolationLevel.ReadCommitted,
+                (tran) =>
+                {
+                    //Check user exists
+                    var user = this.UsersDal.GetUser(tran, email, password);
+                    if (user == null)
+                        throw new ApiException(Exceptions.UserNotFound);
+
+                    return user;
+                });
+            });
+        }
+
         public Task<User> GetUserAsync(ExternalLoginProvider loginProvider, string providerKey)
         {
             return Task<User>.Factory.StartNew(() =>

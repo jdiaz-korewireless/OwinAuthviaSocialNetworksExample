@@ -32,6 +32,18 @@ namespace AuthDomain.Dal
             }
         }
 
+        public UserDb GetUser(SqlTransaction transaction, string email, string password)
+        {
+            using (var cmd = new SqlCommand("[dbo].[spGetUserByEmailPassword]", transaction.Connection, transaction))
+            {
+                cmd.Parameters.AddWithValue("email", email);
+                cmd.Parameters.AddWithValue("password", password);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                return GetSingleUser(cmd);
+            }
+        }
+
         public UserDb GetUser(SqlTransaction transaction, ExternalLoginProvider loginProvider, string providerKey)
         {  
             using (var cmd = new SqlCommand("[dbo].[spGetExternalUser]", transaction.Connection, transaction))

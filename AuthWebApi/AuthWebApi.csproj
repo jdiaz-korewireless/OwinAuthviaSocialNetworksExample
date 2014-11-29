@@ -160,6 +160,7 @@
     <Content Include="Content\img\Facebook.png" />
     <Content Include="Content\img\Google.png" />
     <Content Include="Content\img\Microsoft.png" />
+    <Content Include="Content\img\Password.png" />
     <Content Include="Content\img\waiting.gif" />
     <Content Include="Content\js\main.js" />
     <Content Include="packages.config" />

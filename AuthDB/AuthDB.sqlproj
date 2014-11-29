@@ -59,6 +59,7 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="Procedures" />
+    <Folder Include="Indexes" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\User.sql" />
@@ -75,6 +76,8 @@
     <Build Include="Procedures\spGetUserById.sql" />
     <Build Include="Procedures\spGetUserAvatar.sql" />
     <Build Include="Procedures\spUpdateUser.sql" />
+    <Build Include="Procedures\spGetUserByEmailPassword.sql" />
+    <Build Include="Indexes\IX_UserEmailPassSearch.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="InitDB.sql" />

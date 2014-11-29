@@ -53,11 +53,9 @@ namespace AuthWebApi.Providers
             return this.UsersManager.GetUserAsync(userId);
         }
 
-        public Task<User> FindAsync(string login, string password)
+        public Task<User> FindAsync(string email, string password)
         {
-            throw new NotImplementedException();
-
-            //return this.UsersManager.GetUserAsync(login, password);
+            return this.UsersManager.GetUserAsync(email, password);
         }
 
         public Task<User> FindAsync(ExternalLoginProvider loginProvider, string providerKey)

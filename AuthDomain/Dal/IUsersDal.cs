@@ -9,6 +9,8 @@ namespace AuthDomain.Dal
 
         UserDb GetUser(SqlTransaction transaction, string email);
 
+        UserDb GetUser(SqlTransaction transaction, string email, string password);
+
         UserDb GetUser(SqlTransaction transaction, ExternalLoginProvider loginProvider, string providerKey);
 
         byte[] GetAvatar(SqlTransaction transaction, int userId);
