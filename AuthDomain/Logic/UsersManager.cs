@@ -9,10 +9,12 @@ namespace AuthDomain.Logic
 {
     public class UsersManager
     {
+        public IBaseDal BaseDal { get; set; }
         public IUsersDal UsersDal { get; set; }
 
         public UsersManager()
         {
+            this.BaseDal = new BaseDal();
             this.UsersDal = new UsersDal();
         }
 
@@ -20,7 +22,7 @@ namespace AuthDomain.Logic
         {
             return Task<User>.Factory.StartNew(() =>
             {
-                return this.UsersDal.Execute(IsolationLevel.ReadCommitted,
+                return this.BaseDal.Execute(IsolationLevel.ReadCommitted,
                 (tran) =>
                 {
                     //Check user exists
@@ -37,7 +39,7 @@ namespace AuthDomain.Logic
         {
             return Task<User>.Factory.StartNew(() =>
             {
-                return this.UsersDal.Execute(IsolationLevel.ReadCommitted,
+                return this.BaseDal.Execute(IsolationLevel.ReadCommitted,
                 (tran) =>
                 {
                     return this.UsersDal.GetUser(tran, loginProvider, providerKey);
@@ -49,7 +51,7 @@ namespace AuthDomain.Logic
         {
             return Task<byte[]>.Factory.StartNew(() =>
             {
-                return this.UsersDal.Execute(IsolationLevel.ReadCommitted,
+                return this.BaseDal.Execute(IsolationLevel.ReadCommitted,
                 (tran) =>
                 {
                     return this.UsersDal.GetAvatar(tran, userId);
@@ -61,7 +63,7 @@ namespace AuthDomain.Logic
         {
             return Task<User>.Factory.StartNew(() =>
             {
-                return this.UsersDal.Execute(IsolationLevel.Serializable,
+                return this.BaseDal.Execute(IsolationLevel.Serializable,
                 (tran) =>
                 {
                     //Check if external login is unique
@@ -107,7 +109,7 @@ namespace AuthDomain.Logic
         {
             return Task<UserVerification>.Factory.StartNew(() =>
             {
-                return this.UsersDal.Execute(IsolationLevel.ReadCommitted,
+                return this.BaseDal.Execute(IsolationLevel.ReadCommitted,
                 (tran) =>
                 {
                     //Check user exists
@@ -131,7 +133,7 @@ namespace AuthDomain.Logic
         {
             return Task<User>.Factory.StartNew(() =>
             {
-                return this.UsersDal.Execute(IsolationLevel.Snapshot,
+                return this.BaseDal.Execute(IsolationLevel.Snapshot,
                 (tran) =>
                 {
                     //Check user exists
@@ -157,7 +159,7 @@ namespace AuthDomain.Logic
         {
             return Task.Factory.StartNew(() =>
             {
-                this.UsersDal.Execute(IsolationLevel.Snapshot,
+                this.BaseDal.Execute(IsolationLevel.Snapshot,
                 (tran) =>
                 {
                     this.UsersDal.DeleteUserWithDependencies(tran, userId);

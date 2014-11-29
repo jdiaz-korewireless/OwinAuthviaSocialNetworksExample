@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiException.cs" />
+    <Compile Include="Dal\BaseDal.cs" />
+    <Compile Include="Dal\Helper.cs" />
+    <Compile Include="Dal\IBaseDal.cs" />
     <Compile Include="Dal\IUsersDal.cs" />
     <Compile Include="Dal\UsersDal.cs" />
     <Compile Include="Logic\UsersManager.cs" />
