@@ -59,8 +59,13 @@ function byPassAuth()
     resetToken();
     $('#info').hide();
 
-    var email = "natalia.a.zelenskaya@gmail.com";
-    var pass = "lala";
+    //Method requests a new token for a registered user
+
+    //TODO: User's registration should be a separate API call -> POST api/account/register, data: email + password
+    //TODO: Refresh token should be a separate API call -> POST api/token, data:grant_type=refresh token
+
+    var email = "email@gmail.com";
+    var pass = "password";
 
     $.ajax({
         type: "POST",
