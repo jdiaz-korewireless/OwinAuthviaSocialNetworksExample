@@ -42,12 +42,8 @@ namespace AuthDomain.Logic
                 return this.BaseDal.Execute(IsolationLevel.ReadCommitted,
                 (tran) =>
                 {
-                    //Check user exists
-                    var user = this.UsersDal.GetUser(tran, email, password);
-                    if (user == null)
-                        throw new ApiException(Exceptions.UserNotFound);
-
-                    return user;
+                    //Can return null
+                    return this.UsersDal.GetUser(tran, email, password);
                 });
             });
         }
