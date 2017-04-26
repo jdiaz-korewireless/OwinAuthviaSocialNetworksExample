@@ -61,7 +61,7 @@ namespace AuthWebApi.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 111.
+        ///   Looks up a localized string similar to 1825076684482743.
         /// </summary>
         internal static string Facebook_Id {
             get {
@@ -70,7 +70,7 @@ namespace AuthWebApi.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 222.
+        ///   Looks up a localized string similar to b2c2e14366c6248d50227576447c3150.
         /// </summary>
         internal static string Facebook_Secret {
             get {
